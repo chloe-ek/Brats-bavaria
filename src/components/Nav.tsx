@@ -9,7 +9,7 @@ const Nav = () => {
   const router = useRouter();
 
   return (
-    <header className="flex items-center justify-between border-b border-b-[#293238] px-10 py-3">
+    <header className="flex items-center justify-between border-b border-b-[#293238] px-10 py-3  bg-[#111518] text-white ">
       <div className="flex items-center gap-4 text-white">
         <div className="size-4">
           <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,16 +25,16 @@ const Nav = () => {
             />
           </svg>
         </div>
-        <h2 className="text-white text-lg font-bold">Brats & Bavaria</h2>
+        <h2 className="text-white text-lg font-bold font-Ovo">Brats & Bavaria</h2>
       </div>
       <div className="flex flex-1 justify-end gap-8">
       <div className="flex items-center gap-9">
         <Link href="/" className="text-white text-sm font-medium">Home</Link>
-        <Link href="/map" className="text-white text-sm font-medium">Location</Link>
-        <Link href="/about" className="text-white text-sm font-medium">About</Link>
-        <Link href="/contact" className="text-white text-sm font-medium">Contact</Link>
+        <Link href="#location" className="text-white text-sm font-medium">Location</Link>
+        <Link href="#about" className="text-white text-sm font-medium">About</Link>
+        <Link href="#contact" className="text-white text-sm font-medium">Contact</Link>
       </div>
-        <button className="h-10 min-w-[84px] rounded-lg bg-[#1997e5] px-4 text-sm font-bold text-white"
+        <button className="h-9 min-w-[84px] bg-[#f6f6f6] px-3 py-2 text-sm font-bold text-black"
         onClick={() => router.push('/submit')}>
           Apply
         </button>
