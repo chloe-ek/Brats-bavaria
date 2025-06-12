@@ -7,7 +7,16 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        Outfit: ['Outfit', 'sans-serif'],
+        Ovo: ['Ovo', 'serif'],
+        Playfair: ['Playfair Display', 'serif'],
+        Roboto: ['Roboto', 'sans-serif'],
+        Satoshi: ['Satoshi', 'sans-serif'],
+        Cinzel: ['Cinzel', 'serif'],
+      },
+    },
   },
   plugins: [],
 }
