@@ -15,6 +15,7 @@ module.exports = {
         Roboto: ['Roboto', 'sans-serif'],
         Satoshi: ['Satoshi', 'sans-serif'],
         Cinzel: ['Cinzel', 'serif'],
+        Poppins: ['Poppins', 'sans-serif'],
       },
     },
   },
