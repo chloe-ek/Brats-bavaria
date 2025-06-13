@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -9,7 +10,7 @@ const Nav = () => {
   const router = useRouter();
 
   return (
-    <header className="flex items-center justify-between border-b border-b-[#293238] px-10 py-3  bg-[#111518] text-white ">
+    <header className="sticky top-0 z-50 flex items-center border-b border-b-[#293238] px-10 py-4  bg-[#111518] text-white ">
       <div className="flex items-center gap-4 text-white">
         <div className="size-4">
           <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -25,8 +26,14 @@ const Nav = () => {
             />
           </svg>
         </div>
-        <h2 className="text-white text-lg font-bold font-Ovo">Brats & Bavaria</h2>
-      </div>
+        <Image
+          src="/logo.png"
+          alt="German Auto Festival - Brats & Bavaria"
+          width={250}
+          height={50}
+          className="hidden md:block"
+        />
+          </div>
       <div className="flex flex-1 justify-end gap-8">
       <div className="flex items-center gap-9">
         <Link href="/" className="text-white text-sm font-medium">Home</Link>
