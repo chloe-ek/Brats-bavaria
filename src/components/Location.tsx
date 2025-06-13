@@ -10,12 +10,10 @@ const Location = () => {
       <div className="mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-Ovo">Event Location</h2>
         <p className="text-sm sm:text-base font-sans mb-10 leading-relaxed max-w-2xl">
-          Find us at Richmond in Vancouver. Use the map below to explore the event venue and plan your visit.
-          
-         <p>CLASSIC GARAGE PERFORMANCE, 4331 Vanguard Rd, Richmond, BC V6X 2P6</p> 
+        CLASSIC GARAGE PERFORMANCE, 4331 Vanguard Rd, Richmond, BC V6X 2P6
         </p>
 
-        <div className="h-[0.25px] bg-white w-full mb-10"></div>
+        <div className="h-[1px] bg-white/20 w-full mb-12" />
 
 
 
