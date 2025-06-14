@@ -16,6 +16,7 @@ module.exports = {
         Satoshi: ['Satoshi', 'sans-serif'],
         Cinzel: ['Cinzel', 'serif'],
         Poppins: ['Poppins', 'sans-serif'],
+        Montserrat: ['Montserrat', 'sans-serif'],
       },
     },
   },

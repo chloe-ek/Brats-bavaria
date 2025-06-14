@@ -10,11 +10,11 @@ const Info = () => {
         className="text-white px-6 md:px-20 lg:px-40 py-20 max-w-[1600px] mx-auto"
       >
         <div className="mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-Ovo mt-8">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-Montserrat mt-8">
             Event Info
           </h2>
           <p className="text-sm sm:text-base font-sans mb-10 leading-relaxed max-w-2xl">
-            Find us at Richmond in Vancouver. Use the cards below to learn more
+            Find us at Classic Garage in Richnmod. Check the cards below to learn more
             about the event experience and schedule.
           </p>
 
@@ -25,14 +25,14 @@ const Info = () => {
             {/* Card 1 */}
             <div className="bg-white/5 border border-white/10 shadow-md backdrop-blur-sm hover:shadow-xl transition overflow-hidden">
               <Image
-                src="/meet.png"
+                src="/meet.jpg"
                 alt="Meet & Park"
                 width={300}
                 height={300}
                 className="w-full h-80 object-cover"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold font-Ovo mb-2">
+                <h3 className="text-xl font-semibold font-Montserrat mb-2">
                   Meet & Park
                 </h3>
                 <p className="text-sm text-white/80 leading-relaxed">
@@ -45,14 +45,14 @@ const Info = () => {
             {/* Card 2 */}
             <div className="bg-white/5 border border-white/10 shadow-md backdrop-blur-sm hover:shadow-xl transition overflow-hidden">
             <Image
-                src="/meet.png"
-                alt="Meet & Park"
+                src="/showcase1.jpg"
+                alt="Showcase & Photoshoot"
                 width={500}
                 height={300}
                 className="w-full h-80 object-cover"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold font-Ovo mb-2">
+                <h3 className="text-xl font-semibold   font-Montserrat mb-2">
                   Showcase & Photoshoot
                 </h3>
                 <p className="text-sm text-white/80 leading-relaxed">
@@ -65,14 +65,14 @@ const Info = () => {
             {/* Card 3 */}
             <div className="bg-white/5 border border-white/10 shadow-md backdrop-blur-sm hover:shadow-xl transition overflow-hidden">
             <Image
-                src="/meet.png"
-                alt="Meet & Park"
+                src="/awards.jpg"
+                alt="Awards & Wrap-up"
                 width={500}
                 height={300}
                 className="w-full h-80 object-cover"
               />
               <div className="p-6">
-                <h3 className="text-xl font-semibold font-Ovo mb-2">
+                <h3 className="text-xl font-semibold   font-Montserrat mb-2">
                   Awards & Wrap-up
                 </h3>
                 <p className="text-sm text-white/80 leading-relaxed">

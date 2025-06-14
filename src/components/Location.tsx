@@ -8,7 +8,7 @@ const Location = () => {
 
     <section id="location" className="bg-[#111518] text-white px-6 md:px-20 lg:px-40 py-20 max-w-[1600px] mx-auto">
       <div className="mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-Ovo">Event Location</h2>
+        <h2 className="text-3xl sm:text-4xl font-bold mb-4   font-Montserrat">Event Location</h2>
         <p className="text-sm sm:text-base font-sans mb-10 leading-relaxed max-w-2xl">
         CLASSIC GARAGE PERFORMANCE, 4331 Vanguard Rd, Richmond, BC V6X 2P6
         </p>

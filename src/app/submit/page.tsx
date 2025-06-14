@@ -92,7 +92,7 @@ const Submit = () => {
 
       <main className="flex-1 px-6 md:px-20 lg:px-40 py-20 w-full max-w-[1600px] mx-auto">
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-10 text-center font-Ovo">Submit Your Car</h1>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-10 text-center   font-Montserrat">Submit Your Car</h1>
 
         <div className="mb-10 text-center">
           <p>There are limited spots available to display your vehicle. Please submit your application below to reserve your spot.</p>
