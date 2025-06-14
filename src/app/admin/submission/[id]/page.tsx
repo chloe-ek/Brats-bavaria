@@ -53,6 +53,15 @@ const SubmissionDetail = () => {
 
       if (res.ok) {
         toast.success(`Submission ${decision}`);
+
+        // Send email if approved
+        if (decision === "approved" && submission) {
+          await fetch("/api/email/send", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: submission.email, name: submission.name }),
+          });
+        }
         router.push("/admin/dashboard");
       } else {
         toast.error("Failed to update status");
