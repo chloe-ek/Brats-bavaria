@@ -1,11 +1,11 @@
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { adminDb } from "@/lib/admin";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
-  const supabase = createRouteHandlerClient({ cookies });
-
-  const { error } = await supabase
+export async function POST(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
+  const { error } = await adminDb
     .from("submissions")
     .update({ seen: true })
     .eq("id", params.id);
