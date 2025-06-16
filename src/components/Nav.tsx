@@ -37,9 +37,9 @@ const Nav = () => {
       <div className="flex flex-1 justify-end gap-8">
       <div className="flex items-center gap-9">
         <Link href="/" className="text-white text-sm font-medium">Home</Link>
-        <Link href="#location" className="text-white text-sm font-medium">Location</Link>
-        <Link href="#about" className="text-white text-sm font-medium">About</Link>
-        <Link href="#contact" className="text-white text-sm font-medium">Contact</Link>
+        <Link href="/#location" className="text-white text-sm font-medium">Location</Link>
+        <Link href="/about" className="text-white text-sm font-medium">About</Link>
+        <Link href="/#contact" className="text-white text-sm font-medium">Contact</Link>
       </div>
         <button className="h-9 min-w-[84px] bg-[#f6f6f6] px-3 py-2 text-sm font-bold text-black"
         onClick={() => router.push('/submit')}>
