@@ -45,23 +45,19 @@ const SubmissionDetail = () => {
   // Handle approval or rejection
   const handleDecision = async (decision: "approved" | "rejected") => {
     try {
+      const payload =
+        decision === "approved"
+          ? { email: submission?.email, name: submission?.name }
+          : undefined ;
+  
       const res = await fetch(`/api/admin/submissions/${id}/${decision}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notes }),
+        body: JSON.stringify(payload),
       });
-
+  
       if (res.ok) {
         toast.success(`Submission ${decision}`);
-
-        // Send email if approved
-        if (decision === "approved" && submission) {
-          await fetch("/api/email/send", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: submission.email, name: submission.name }),
-          });
-        }
         router.push("/admin/dashboard");
       } else {
         toast.error("Failed to update status");
