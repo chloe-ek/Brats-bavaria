@@ -6,7 +6,7 @@ const Location = () => {
   return (
     <div className="relative w-full bg-[#111518]">
 
-    <section id="location" className="bg-[#111518] text-white px-6 md:px-20 lg:px-40 py-20 max-w-[1600px] mx-auto">
+    <section id="location" className="bg-[#111518] text-white px-6 md:px-20 lg:px-40 py-20 max-w-[1600px] mx-auto scroll-mt-10">
       <div className="mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold mb-4   font-Montserrat">Event Location</h2>
         <p className="text-sm sm:text-base font-sans mb-10 leading-relaxed max-w-2xl">
@@ -17,7 +17,7 @@ const Location = () => {
 
 
 
-          <div className="w-full h-[600px] overflow-hidden border border-white">
+          <div className="w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden border border-white">
             <MapEmbed />
           </div>
 

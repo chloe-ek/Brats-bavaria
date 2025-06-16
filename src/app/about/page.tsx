@@ -2,11 +2,10 @@ import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 const about = () => {
   return (
-
     <div className="bg-[#111518] text-white min-h-screen flex flex-col">
       <Nav />
     
-          <div className="relative z-10 mx-auto max-w-[1600px] px-6 md:px-20 lg:px-40 py-24 text-white">
+          <div className="flex-grow mx-auto max-w-[1600px] px-6 md:px-20 lg:px-40 py-24 text-white">
             <h1 className="text-6xl font-semibold mb-4 font-Montserrat text-center w-full">
              ABOUT US
             </h1>

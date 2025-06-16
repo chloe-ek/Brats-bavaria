@@ -3,49 +3,83 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 
 
 
 const Nav = () => {
   const router = useRouter();
+  const menuRef = useRef<HTMLUListElement | null>(null);
+
+  const openMenu = () => {
+    if (menuRef.current) {
+      menuRef.current.classList.remove('translate-x-full');
+    }
+  };
+
+  const closeMenu = () => {
+    if (menuRef.current) {
+      menuRef.current.classList.add('translate-x-full');
+    }
+  };
+
 
   return (
-    <header className="sticky top-0 z-50 flex items-center border-b border-b-[#293238] px-10 py-4  bg-[#111518] text-white ">
-      <div className="flex items-center gap-4 text-white">
-        <div className="size-4">
-          <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M13.8261 30.5736C16.7203 29.8826 20.2244 29.4783 24 29.4783C27.7756 29.4783 31.2797 29.8826 34.1739 30.5736C36.9144 31.2278 39.9967 32.7669 41.3563 33.8352L24.8486 7.36089C24.4571 6.73303 23.5429 6.73303 23.1514 7.36089L6.64374 33.8352C8.00331 32.7669 11.0856 31.2278 13.8261 30.5736Z"
-              fill="currentColor"
-            />
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M39.998 35.764C39.9944 35.7463 39.9875 35.7155 39.9748 35.6706..."
-              fill="currentColor"
-            />
-          </svg>
-        </div>
+    <header className="sticky top-0 z-50 flex justify-between items-center border-b border-b-[#293238] px-10 py-4  bg-[#111518] text-white ">
+
+        <Link href="/" className='flex items-center'>
         <Image
           src="/logo.png"
-          alt="German Auto Festival - Brats & Bavaria"
+          alt="Logo"
           width={250}
           height={50}
-          className="hidden md:block"
+          className="max-w-[112px] md:max-w-none h-auto cursor-pointer"
         />
-          </div>
-      <div className="flex flex-1 justify-end gap-8">
-      <div className="flex items-center gap-9">
+        </Link>
+
+      <nav className="hidden md:flex flex-1 justify-end gap-10 items-center">
         <Link href="/" className="text-white text-sm font-medium">Home</Link>
         <Link href="/#location" className="text-white text-sm font-medium">Location</Link>
         <Link href="/about" className="text-white text-sm font-medium">About</Link>
         <Link href="/#contact" className="text-white text-sm font-medium">Contact</Link>
-      </div>
         <button className="h-9 min-w-[84px] bg-[#f6f6f6] px-3 py-2 text-sm font-bold text-black"
         onClick={() => router.push('/submit')}>
           Apply
         </button>
-      </div>
+      </nav>
+
+      {/* Mobile Menu Button */}
+      <button className="block md:hidden items-end" onClick={openMenu}>
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+
+      {/* Mobile Side Menu */}
+      <ul
+        ref={menuRef}
+        className="fixed top-0 right-0 z-50 h-full w-64 bg-[#111518] text-white flex flex-col gap-6 px-6 py-20 transform translate-x-full transition-transform duration-300 md:hidden"
+      >
+        <button className="absolute top-5 right-5" onClick={closeMenu}>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <Link href="/" onClick={closeMenu}>Home</Link>
+        <Link href="/#location" onClick={closeMenu}>Location</Link>
+        <Link href="/about" onClick={closeMenu}>About</Link>
+        <Link href="/#contact" onClick={closeMenu}>Contact</Link>
+        <button
+          className="bg-white text-black py-2 px-4 font-bold mt-4"
+          onClick={() => {
+            closeMenu();
+            router.push('/submit');
+          }}
+        >
+          Apply
+        </button>
+      </ul>
     </header>
   );
 };
