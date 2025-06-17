@@ -25,7 +25,7 @@ const Info = () => {
             {/* Card 1 */}
             <div className="bg-white/5 border border-white/10 shadow-md backdrop-blur-sm hover:shadow-xl transition overflow-hidden">
               <Image
-                src="/meet.jpg"
+                src="/cars.jpeg"
                 alt="Meet & Park"
                 width={300}
                 height={300}
@@ -45,7 +45,7 @@ const Info = () => {
             {/* Card 2 */}
             <div className="bg-white/5 border border-white/10 shadow-md backdrop-blur-sm hover:shadow-xl transition overflow-hidden">
             <Image
-                src="/showcase1.jpg"
+                src="/beer.jpeg"
                 alt="Showcase & Photoshoot"
                 width={500}
                 height={300}
