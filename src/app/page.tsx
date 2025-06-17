@@ -6,6 +6,8 @@ import Hero from '@/components/Hero';
 import Info from '@/components/Info';
 import Location from '@/components/Location';
 import Nav from '@/components/Nav';
+import PreviousEvents from '@/components/PreviousEvents';
+
 
 
 const Home = () => {
@@ -14,6 +16,7 @@ const Home = () => {
       <Nav />
       <Hero />
       <Info />
+      <PreviousEvents />
       <Location />
       <Contact />
       <Footer />
