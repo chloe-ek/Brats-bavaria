@@ -101,9 +101,15 @@ const AdminDashboard = () => {
                   <tr key={sub.id} className="border-t border-gray-700">
                     <td className="p-3">{sub.name}</td>
                     <td className="p-3">{sub.car_make} {sub.car_model} ({sub.car_year})</td>
-                    <td className="p-3">{sub.status}</td>
                     <td className="p-3">
-                      <span className={`text-xs px-2 py-1    ${sub.seen ? 'bg-green-800' : 'bg-yellow-300 text-black'}`}>
+                        <span
+                          className={`text-xs px-2 py-1 ${ sub.status === 'approved' ? 'bg-green-800'
+                              : sub.status === 'rejected'? 'bg-red-800': 'bg-gray-800'}`} >
+                          {sub.status === 'approved' ? 'approved' : sub.status === 'rejected' ? 'rejected': 'pending'}
+                        </span>
+                    </td>
+                    <td className="p-3">
+                      <span className={`text-xs px-2 py-1    ${sub.seen ? 'bg-gray-800' : 'bg-yellow-300 text-black'}`}>
                         {sub.seen ? 'Seen' : 'New'}
                       </span>
                     </td>
