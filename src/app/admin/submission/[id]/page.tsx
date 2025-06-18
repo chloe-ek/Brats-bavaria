@@ -147,19 +147,29 @@ const SubmissionDetail = () => {
         </div>
 
         {/* Approve/Reject buttons */}
-        <div className="flex gap-4">
-          <button
-            onClick={() => handleDecision("approved")}
-            className="bg-green-600 px-4 py-2    hover:bg-green-700"
-          >
-            Approve
-          </button>
-          <button
-            onClick={() => handleDecision("rejected")}
-            className="bg-red-600 px-4 py-2    hover:bg-red-700"
-          >
-            Reject
-          </button>
+        <div className="flex justify-between">
+          <div className="flex gap-4">
+            <button
+              onClick={() => handleDecision("approved")}
+              className="bg-green-600 px-4 py-2    hover:bg-green-700"
+            >
+              Approve
+            </button>
+            <button
+              onClick={() => handleDecision("rejected")}
+              className="bg-red-600 px-4 py-2    hover:bg-red-700"
+            >
+              Reject
+            </button>
+          </div>
+          <div>
+            <button
+              onClick={() => router.push("/admin/dashboard")}
+              className="bg-gray-600 px-4 py-2    hover:bg-gray-700"
+            >
+              Back
+            </button>
+          </div>
         </div>
       </main>
       <Footer />
