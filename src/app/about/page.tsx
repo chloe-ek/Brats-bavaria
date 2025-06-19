@@ -24,6 +24,16 @@ const members = [
     profileImg: "/dubb.png",
     instagramUrl: "https://www.instagram.com/Dubberzforum",
   },
+  {
+    instagramId: "aloravii.v",
+    profileImg: "/alora.png",
+    instagramUrl: "https://www.instagram.com/aloravii.v/",
+  },
+  {
+    instagramId: "joeschmoez",
+    profileImg: "/joes.png",
+    instagramUrl: "https://www.instagram.com/joeschmoez?igsh=MWtmY2VyaWxqM3lq",
+  }
 ];
 
 const About = () => {
@@ -61,7 +71,7 @@ const About = () => {
         </div>
 
         {/* Instagram Cards Section */}
-        <div className="mt-11 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-11 grid lg:grid-cols-3 gap-6">
 
           {members.map((member, index) => (
             <Link
