@@ -36,7 +36,7 @@ const Hero = () => {
               Bratwurst/German food, Sponsor booths, live DJ and more!
             </p>
             <p className="text-md font-Montserrat font-bold">
-              Sunday, June 30th, 2025
+              Sunday, August 24th, 2025
             </p>
             <p className="text-md font-sans mb-5">
               Vehicles on display will need to arrive approx 1 hour before the
