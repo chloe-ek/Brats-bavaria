@@ -16,7 +16,12 @@ const AdminDashboard = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [filter, setFilter] = useState<'all' | 'approved'>('all');
 
+  const filteredSubmissions =
+  filter === 'approved'
+    ? submissions.filter((sub) => sub.status?.toLowerCase() === 'approved')
+    : submissions;
 
   // Check if current user is admin
   useEffect(() => {
@@ -79,10 +84,31 @@ const AdminDashboard = () => {
       <main className="flex-1 px-6 py-10 w-full mx-auto">
         <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-        {submissions.length === 0 ? (
+        {filteredSubmissions.length === 0 ? (
+
           <p>No submissions yet.</p>
         ) : (
           <div className="overflow-x-auto">
+            <div className="mb-4 flex gap-4">
+              <button
+                onClick={() => setFilter('all')}
+                className={`px-4 py-2 border ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300'}`}
+              >
+                All ({submissions.length})
+              </button>
+
+              <button
+                onClick={() => setFilter('approved')}
+                className={`px-4 py-2 border ${filter === 'approved' ? 'bg-green-700 text-white' : 'bg-gray-800 text-gray-300'}`}
+              >
+                Approved (
+                {
+                  submissions.filter((sub) => sub.status?.toLowerCase() === 'approved').length
+                }
+                )
+              </button>
+            </div>
+
             <table className="w-full border-collapse text-sm">
               <thead>
               <tr className="bg-gray-800">
@@ -97,7 +123,7 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {submissions.map((sub) => (
+              {filteredSubmissions.map((sub) => (
                   <tr key={sub.id} className="border-t border-gray-700">
                     <td className="p-3">{sub.name}</td>
                     <td className="p-3">{sub.car_make} {sub.car_model} ({sub.car_year})</td>
