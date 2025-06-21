@@ -90,17 +90,17 @@ const Submit = () => {
     <div className="bg-[#111518] text-white min-h-screen flex flex-col">
       <Nav />
 
-      <main className="flex-1 px-6 md:px-20 lg:px-40 py-20 w-full max-w-[1600px] mx-auto">
+      <main className="flex-1 px-4 sm:px-6 md:px-20 lg:px-40 py-12 sm:py-16 md:py-20 w-full max-w-[1600px] mx-auto">
 
-        <h1 className="text-3xl sm:text-4xl font-bold mb-10 text-center   font-Montserrat">Submit Your Car</h1>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-10 text-center font-Montserrat">Submit Your Car</h1>
 
-        <div className="mb-10 text-center">
-          <p>There are limited spots available to display your vehicle. Please submit your application below to reserve your spot.</p>
-          <p>If accepted, there will be an entry fee of $40 due.</p>
+        <div className="mb-8 sm:mb-10 text-center">
+          <p className="text-sm sm:text-base">There are limited spots available to display your vehicle. Please submit your application below to reserve your spot.</p>
+          <p className="text-sm sm:text-base mt-2">If accepted, there will be an entry fee of $40 due.</p>
           
         </div>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {/* Contact Info */}
           <div className="col-span-1 md:col-span-2">
             <h2 className="text-lg sm:text-xl font-semibold mb-4">Contact Information</h2>
@@ -109,7 +109,7 @@ const Submit = () => {
           <div>
             <label className="block text-sm mb-1" htmlFor="name">Name</label>
             <input
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               type="text"
               id="name"
               name="name"
@@ -121,7 +121,7 @@ const Submit = () => {
           <div>
             <label className="block text-sm mb-1" htmlFor="email">Email</label>
             <input
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               type="email"
               id="email"
               name="email"
@@ -132,7 +132,7 @@ const Submit = () => {
           <div className="md:col-span-2">
             <label className="block text-sm mb-1" htmlFor="phone">Phone Number</label>
             <input
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               type="tel"
               id="phone"
               name="phone"
@@ -149,7 +149,7 @@ const Submit = () => {
             <select
               id="make"
               name="make"
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               required
             >
               <option value="">Select Brand</option>
@@ -164,7 +164,7 @@ const Submit = () => {
           <div>
             <label className="block text-sm mb-1" htmlFor="model">Model</label>
             <input
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               type="text"
               id="model"
               name="model"
@@ -175,7 +175,7 @@ const Submit = () => {
           <div>
             <label className="block text-sm mb-1" htmlFor="year">Year</label>
             <input
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               type="number"
               id="year"
               name="year"
@@ -186,7 +186,7 @@ const Submit = () => {
           <div>
             <label className="block text-sm mb-1" htmlFor="instagram">Instagram / Website</label>
             <input
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               type="text"
               id="instagram"
               name="instagram"
@@ -196,7 +196,7 @@ const Submit = () => {
           <div className="col-span-1 md:col-span-2">
             <label className="block text-sm mb-1" htmlFor="comments">Comments / Questions</label>
             <textarea
-              className="w-full p-2   bg-gray-800 text-white border border-gray-600"
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
               id="comments"
               name="comments"
               rows={4}
@@ -205,10 +205,10 @@ const Submit = () => {
 
           {/* Photo Upload */}
           <div className="col-span-1 md:col-span-2">
-            <label htmlFor="photos" className="block text-sm mb-2 font-medium">Upload 5 Car Photos</label>
+            <label htmlFor="photos" className="block text-sm mb-2 font-medium">Upload 3 to 5 Car Photos</label>
             <label
               htmlFor="photos"
-              className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed  -lg cursor-pointer bg-gray-700 hover:bg-gray-600 border-gray-500"
+              className="flex flex-col items-center justify-center w-full h-48 sm:h-64 border-2 border-dashed  -lg cursor-pointer bg-gray-700 hover:bg-gray-600 border-gray-500"
             >
               <div className="flex flex-col items-center justify-center pt-5 pb-6">
                 <svg
@@ -264,7 +264,7 @@ const Submit = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`bg-white px-6 py-2 mt-6 text-black font-semibold transition-opacity ${
+              className={`bg-white px-4 sm:px-6 py-2 sm:py-3 mt-6 text-black font-semibold transition-opacity   ${
                 isSubmitting ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >

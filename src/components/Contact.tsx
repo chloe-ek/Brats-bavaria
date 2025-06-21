@@ -36,16 +36,16 @@ const Contact = () => {
   
 
   return (
-    <div id="contact" className="w-full px-6 md:px-20 lg:px-40 py-20 bg-no-repeat bg-center max-w-[1600px] mx-auto">
-      <div className="h-20" />
-      <h2 className="text-center text-5xl font-Montserrat">Contact Us</h2>
+    <div id="contact" className="w-full px-4 sm:px-6 md:px-20 lg:px-40 py-12 sm:py-16 md:py-20 bg-no-repeat bg-center max-w-[1600px] mx-auto">
+      <div className="h-12 sm:h-16 md:h-20" />
+      <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-Montserrat">Contact Us</h2>
 
-      <p className="text-center max-w-2xl mx-auto mt-5 mb-12   font-Montserrat">
+      <p className="text-center max-w-2xl mx-auto mt-4 sm:mt-5 mb-8 sm:mb-12 font-Montserrat text-sm sm:text-base">
        Connect with us for event inquiries, sponsorships, or general information.
       </p>
 
       <form onSubmit={onSubmit} className="max-w-2xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 mt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8 mt-8 sm:mt-10">
           <input
             type="text"
             name="name"
@@ -78,7 +78,7 @@ const Contact = () => {
 
         <button
           type="submit"
-          className="py-3 px-8 w-max flex items-center justify-between gap-2 bg-black/80 text-white mx-auto hover:bg-black duration-500"
+          className="py-3 px-6 sm:px-8 w-max flex items-center justify-between gap-2 bg-black/80 text-white mx-auto hover:bg-black duration-500  "
         >
           Submit
           

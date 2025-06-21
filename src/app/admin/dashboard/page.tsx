@@ -36,7 +36,7 @@ const AdminDashboard = () => {
         return;
       }
 
-      if (user.email !== 'kwonge08e@gmail.com') {
+      if (user.email !== 'kwonge08e@gmail.com') { // TODO 
         toast.error('Access denied');
         router.push('/admin/login');
         return;

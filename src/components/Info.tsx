@@ -7,21 +7,21 @@ const Info = () => {
     <div className="relative w-full bg-[#111518]">
       <section
         id="Info"
-        className="text-white px-6 md:px-20 lg:px-40 py-20 max-w-[1600px] mx-auto"
+        className="text-white px-4 sm:px-6 md:px-20 lg:px-40 py-12 sm:py-16 md:py-20 max-w-[1600px] mx-auto"
       >
         <div className="mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 font-Montserrat mt-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 font-Montserrat mt-4 sm:mt-8">
             Event Info
           </h2>
-          <p className="text-sm sm:text-base font-sans mb-10 leading-relaxed max-w-2xl">
+          <p className="text-sm sm:text-base font-sans mb-8 sm:mb-10 leading-relaxed max-w-2xl">
             Find us at Classic Garage in Richnmod. Check the cards below to learn more
             about the event experience and schedule.
           </p>
 
-          <div className="h-[1px] bg-white/20 w-full mb-12" />
+          <div className="h-[1px] bg-white/20 w-full mb-8 sm:mb-12" />
 
           {/* 3 cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
             {/* Card 1 */}
             <div className="bg-white/5 border border-white/10 shadow-md backdrop-blur-sm hover:shadow-xl transition overflow-hidden">
               <Image
@@ -29,10 +29,10 @@ const Info = () => {
                 alt="Meet & Park"
                 width={300}
                 height={300}
-                className="w-full h-80 object-cover"
+                className="w-full h-64 md:h-80 object-cover"
               />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold font-Montserrat mb-2">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-semibold font-Montserrat mb-2">
                   Meet & Park
                 </h3>
                 <p className="text-sm text-white/80 leading-relaxed">
@@ -47,12 +47,12 @@ const Info = () => {
             <Image
                 src="/beer.jpeg"
                 alt="Showcase & Photoshoot"
-                width={500}
+                width={300}
                 height={300}
-                className="w-full h-80 object-cover"
+                className="w-full h-64 md:h-80 object-cover"
               />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold   font-Montserrat mb-2">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-semibold   font-Montserrat mb-2">
                   Showcase & Photoshoot
                 </h3>
                 <p className="text-sm text-white/80 leading-relaxed">
@@ -67,12 +67,12 @@ const Info = () => {
             <Image
                 src="/awards.jpg"
                 alt="Awards & Wrap-up"
-                width={500}
+                width={300}
                 height={300}
-                className="w-full h-80 object-cover"
+                className="w-full h-64 md:h-80 object-cover"
               />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold   font-Montserrat mb-2">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-semibold   font-Montserrat mb-2">
                   Awards & Wrap-up
                 </h3>
                 <p className="text-sm text-white/80 leading-relaxed">
@@ -82,8 +82,6 @@ const Info = () => {
               </div>
             </div>
           </div>
-
-          <div className="h-20" />
         </div>
       </section>
     </div>
