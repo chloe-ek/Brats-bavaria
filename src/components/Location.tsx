@@ -7,7 +7,7 @@ const Location = () => {
 
     <div className="relative w-full bg-gradient-to-b from-[#262626] to-[#111518]">
 
-    <section id="location" className=" text-white px-4 sm:px-6 md:px-20 lg:px-40 py-12 sm:py-16 md:py-20 max-w-[1600px] mx-auto scroll-mt-10">
+    <section id="location" className=" text-white px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 max-w-[1400px] mx-auto scroll-mt-10">
       <div className="mx-auto">
         <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 font-Montserrat">Event Location</h2>
         <p className="text-sm sm:text-base font-sans mb-8 sm:mb-10 leading-relaxed max-w-2xl">

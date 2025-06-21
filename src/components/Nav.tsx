@@ -25,15 +25,15 @@ const Nav = () => {
 
 
   return (
-    <header className="sticky top-0 z-50 flex justify-between items-center border-b border-b-[#293238] px-10 py-4  bg-[#111518] text-white ">
+    <header className="sticky top-0 z-50 flex justify-between items-center border-b border-b-[#293238] px-8 py-6 md:py-5 bg-[#111518] text-white">
 
         <Link href="/" className='flex items-center'>
         <Image
           src="/logo.png"
           alt="Logo"
           width={250}
-          height={50}
-          className="max-w-[112px] md:max-w-none h-auto cursor-pointer"
+          height={0}
+          className="max-w-[120px] md:max-w-[135px] h-auto cursor-pointer"
         />
         </Link>
 

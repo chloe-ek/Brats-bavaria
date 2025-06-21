@@ -7,7 +7,7 @@ const Info = () => {
     <div className="relative w-full bg-[#111518]">
       <section
         id="Info"
-        className="text-white px-4 sm:px-6 md:px-20 lg:px-40 py-12 sm:py-16 md:py-20 max-w-[1600px] mx-auto"
+        className="text-white px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 max-w-[1400px] mx-auto"
       >
         <div className="mx-auto">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 font-Montserrat mt-4 sm:mt-8">

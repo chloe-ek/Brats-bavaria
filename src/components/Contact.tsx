@@ -36,7 +36,7 @@ const Contact = () => {
   
 
   return (
-    <div id="contact" className="w-full px-4 sm:px-6 md:px-20 lg:px-40 py-12 sm:py-16 md:py-20 bg-no-repeat bg-center max-w-[1600px] mx-auto">
+    <div id="contact" className="w-full px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 bg-no-repeat bg-center max-w-[1400px] mx-auto">
       <div className="h-12 sm:h-16 md:h-20" />
       <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-Montserrat">Contact Us</h2>
 

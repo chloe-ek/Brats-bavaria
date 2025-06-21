@@ -12,7 +12,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-black/70" />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[1600px] px-4 sm:px-10 md:px-20 lg:px-40 py-10 sm:py-14 md:py-20 text-white">
+      <div className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 text-white">
         <motion.h1 
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
