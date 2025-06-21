@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import Image from "next/image";
 
 const Hero = () => {
@@ -12,11 +13,21 @@ const Hero = () => {
       </div>
 
       <div className="relative z-10 mx-auto max-w-[1600px] px-4 sm:px-10 md:px-20 lg:px-40 py-10 sm:py-14 md:py-20 text-white">
-        <h1 className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl font-semibold mb-4 font-Montserrat text-center w-full">
+        <motion.h1 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="text-5xl sm:text-5xl md:text-5xl lg:text-6xl font-semibold mb-4 font-Montserrat text-center w-full"
+        >
          GERMAN AUTO FESTIVAL
-        </h1>
+        </motion.h1>
 
-        <div className="h-[0.5px] bg-white w-full my-6 sm:my-8 md:my-10" />
+        <motion.div 
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          className="h-[0.5px] bg-white w-full my-6 sm:my-8 md:my-10" 
+        />
 
         <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 md:gap-10 items-center">
           <Image
