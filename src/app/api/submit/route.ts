@@ -1,76 +1,37 @@
 import { adminDb } from '@/lib/admin';
-import { cloudinary } from '@/lib/cloudinary';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-  const formData = await req.formData();
+  try {
+    const body = await req.json();
 
-  const name = formData.get('name') as string;
-  const email = formData.get('email') as string;
-  const phone = formData.get('phone') as string;
-  const make = formData.get('make') as string;
-  const model = formData.get('model') as string;
-  const year = parseInt(formData.get('year') as string, 10);
-  const instagram = formData.get('instagram') as string;
-  const questions = formData.get('comments') as string;
+    // Destructure the body
+    const { name, email, phone, make, model, year, instagram, questions, photos } = body;
 
-  // Insert basic info into the DB first (without photo_urls)
-  const { data: insertData, error: insertError } = await adminDb.from('submissions').insert([
-    {
-      name,
-      email,
-      phone,
-      car_make: make,
-      car_model: model,
-      car_year: year,
-      instagram,
-      questions,
-      photo_urls: [], // empty for now
-    },
-  ]).select('id');
+    // Insert basic info into the DB first (without photo_urls)
+    const { data, error } = await adminDb.from('submissions').insert([
+      {
+        name,
+        email,
+        phone,
+        car_make: make,
+        car_model: model,
+        car_year: year,
+        instagram,
+        questions,
+        photo_urls: photos,
+      },
+    ]).select('id');
 
-  if (insertError || !insertData || !insertData[0]?.id) {
-    console.error('Insert error:', insertError);
+  if (error || !data || !data[0]?.id) {
+    console.error('Insert error:', error);
     return NextResponse.json({ message: 'Database insert failed' }, { status: 500 });
   }
 
-  const submissionId = insertData[0].id;
+  return NextResponse.json({ success: true, submissionId: data[0].id });
 
-  // Upload photos to Cloudinary under a folder named after submissionId
-  const photoUrls: string[] = [];
-
-  for (let i = 0; i < 5; i++) {
-    const file = formData.get(`photo${i}`) as File;
-    if (!file) continue;
-
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    const uploadedUrl = await new Promise<string>((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        {
-          folder: `brats-bavaria/${submissionId}`, 
-        },
-        (error, result) => {
-          if (error || !result) reject(error);
-          else resolve(result.secure_url);
-        }
-      );
-      stream.end(buffer);
-    });
-
-    photoUrls.push(uploadedUrl);
+} catch (err) {
+    console.error('Server error:', err);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
-
-  // Update the submission row with the uploaded photo URLs
-  const { error: updateError } = await adminDb.from('submissions')
-    .update({ photo_urls: photoUrls })
-    .eq('id', submissionId);
-
-  if (updateError) {
-    console.error('Update error:', updateError);
-    return NextResponse.json({ message: 'Photo upload failed' }, { status: 500 });
-  }
-
-  return NextResponse.json({ success: true, submissionId });
 }

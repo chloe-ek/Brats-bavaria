@@ -34,52 +34,81 @@ const Submit = () => {
       e.target.value = "";  
       return;
     }
-
+    // save valid files to state
     setFileError("");
     setSelectedFiles(Array.from(files));
+  };
+
+  const uploadToCloudinary = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "car_photo_upload");
+
+    const res = await fetch("https://api.cloudinary.com/v1_1/doymnetao/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    return data.secure_url; // return uploaded image URL
   };
 
   // Handles form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log('📤 handleSubmit triggered');
 
     if (selectedFiles.length < 3 || selectedFiles.length > 5) {
       toast.error("Please upload between 3 and 5 photos.");
       return;
     }
-    // start loading
     setIsSubmitting(true); 
 
     try {
     // Get form data
-    const formData = new FormData(e.currentTarget);
-    
-    // Add files to form data
-    selectedFiles.forEach((file, index) => {
-      formData.append(`photo${index}`, file);
-    });
+    const form = e.currentTarget
+    const formData = new FormData(form);
 
-    // Submit to API
-    const response = await fetch('/api/submit', {
-      method: 'POST',
-      body: formData,
-    });
+    // Upload all photos to Cloudinary and get URLs
+    const photoUrls = await Promise.all(selectedFiles.map(uploadToCloudinary));
+
+    // Create payload to send to API (DB)
+    const payload = {
+      name: formData.get("name"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      make: formData.get("make"),
+      model: formData.get("model"),
+      year: formData.get("year"),
+      instagram: formData.get("instagram"),
+      comments: formData.get("comments"),
+      photos: photoUrls,
+    };
       
-    const data = await response.json();
+    // send to backend API 
+    const response = await fetch("/api/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
       
     if (response.ok) {
-      setSubmitSuccess(true);
+      setSubmitSuccess(true); // triggers redirects
     } else {
-      throw new Error(data.message || 'Submission failed');
+      const err = await response.json();
+      throw new Error(err.message || 'Submission failed');
     }
-  } catch (error) {
+  } catch (err) {
+    console.error(err)
     toast.error("Submission failed. Please try again.");
-    console.error(error)
   } finally {
     setIsSubmitting(false);
     }
   };
 
+  // Redirect on successful submit
   useEffect(() => {
     if (submitSuccess) {
       router.push('/submit/success');
