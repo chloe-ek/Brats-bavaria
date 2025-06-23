@@ -41,7 +41,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     
 
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: 'admin@bratsandbavaria.com',
       to: email,
       subject: 'You’ve been approved!',
       html: `
