@@ -41,7 +41,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     
 
     await resend.emails.send({
-      from: 'admin@bratsandbavaria.com',
+      from: 'events@bratsandbavaria.com',
       to: email,
       subject: 'You’ve been approved!',
       html: `
@@ -51,7 +51,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         <p>Please complete your registration by paying the event fee below:</p>
         <p><a href="${session.url}" style="color: blue;">Click here to pay $40</a></p>
         <p>Thanks,<br />Brats & Bavaria</p>
-        <img src="https://brats-bavaria.vercel.app/approve.png" alt="Approved Car" width="500" />
+        <img src="https://bratsandbavaria.com/approve.png" alt="Approved Car" width="500" />
 
       `,
     });
