@@ -35,8 +35,8 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
           quantity: 1,
         },
       ],
-      success_url: 'https://brats-bavaria.com/payment-success',
-      cancel_url: 'https://brats-bavaria.com/payment-cancel',
+      success_url: 'https://bratsandbavaria.com/payment-success',
+      cancel_url: 'https://bratsandbavaria.com/payment-cancel',
     });
     
 
