@@ -125,7 +125,7 @@ const Submit = () => {
 
         <div className="mb-8 sm:mb-10 text-center">
           <p className="text-sm sm:text-base">There are limited spots available to display your vehicle. Please submit your application below to reserve your spot.</p>
-          <p className="text-sm sm:text-base mt-2">If accepted, there will be an entry fee of $40 due.</p>
+          <p className="text-sm sm:text-base mt-2">If accepted, there will be an entry fee of $42 due.</p>
           
         </div>
 

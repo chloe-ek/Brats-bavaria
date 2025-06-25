@@ -27,15 +27,18 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
           price_data: {
             currency: 'cad',
             product_data: {
-              name: 'Display car ticket',
-              description: 'Display car ticket for Brats and Bavaria 2025',
+              name: 'Car display ticket',
+              description: 'Car display ticket for Brats and Bavaria 2025',
               images: ['https://bratsandbavaria.com/approve.png'],
             },
-            unit_amount: 4000,
+            unit_amount: 4200,
           },
           quantity: 1,
         },
       ],
+      metadata: {
+        submissionId: id, 
+      },
       success_url: 'https://bratsandbavaria.com/payment-success',
       cancel_url: 'https://bratsandbavaria.com/payment-cancel',
     });

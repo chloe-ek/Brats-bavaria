@@ -7,7 +7,7 @@ export async function POST(req: Request) {
 
     const { error } = await resend.emails.send({
     from: 'Brats & Bavaria <noreply@bratsandbavaria.com>',
-      to: 'kwonge08e@gmail.com', // TODO : admin email
+      to: 'pbe46m3@gmail.com',
       subject: `New Message from ${name}`,
       html: `
         <p><strong>Name:</strong> ${name}</p>
