@@ -45,7 +45,7 @@ export default function PrivacyPolicy() {
   
         <h2 className="text-lg sm:text-xl font-semibold mt-6 mb-2">Contact</h2>
         <p className="mb-4">
-          If you have questions or requests regarding your data, contact us at [bratsandbavaria@gmail.com]. {/* TODO: Add contact form */}
+          If you have questions or requests regarding your data, contact us at [pbe46m3@gmail.com]. 
         </p>
   
         <p className="text-sm text-gray-400 mt-8 sm:mt-10">Last updated: June 18, 2025</p>
