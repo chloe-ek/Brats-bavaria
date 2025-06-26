@@ -17,18 +17,23 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     if (error) {
       return NextResponse.json({ error: 'Failed to update approval status' }, { status: 500 });
     }
+
+    const customer = await stripe.customers.create({
+      email,
+      name
+    })
     
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      customer_email: email,
+      customer: customer.id,
       line_items: [
         {
           price_data: {
             currency: 'cad',
             product_data: {
               name: 'Car display ticket',
-              description: 'Car display ticket for Brats and Bavaria 2025',
+              description: 'Brats and Bavaria 2025',
               images: ['https://bratsandbavaria.com/approve.png'],
             },
             unit_amount: 4200,
