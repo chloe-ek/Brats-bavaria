@@ -2,9 +2,11 @@
 
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
+import imageCompression from 'browser-image-compression';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { toast } from 'react-hot-toast';
+
 
 const Submit = () => {
 
@@ -17,7 +19,7 @@ const Submit = () => {
 
 
   // Handles photo file selection
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
@@ -36,8 +38,27 @@ const Submit = () => {
     }
     // save valid files to state
     setFileError("");
-    setSelectedFiles(Array.from(files));
+
+    const compressedFiles = await Promise.all(
+      Array.from(files).map(async (file) => {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1920,
+          useWebWorker: true,
+        };
+        try {
+          const compressedFile = await imageCompression(file, options);
+          return compressedFile;
+        } catch (error) {
+          console.error("Image compression error:", error);
+          return file;
+        }
+      })
+    );
+    setSelectedFiles(compressedFiles);
+    
   };
+  
 
   const uploadToCloudinary = async (file: File) => {
     const formData = new FormData();
@@ -259,7 +280,7 @@ const Submit = () => {
                 <p className="mb-2 text-sm text-gray-300">
                   <span className="font-semibold">Click to upload</span> or drag and drop
                 </p>
-                <p className="text-xs text-gray-400">PNG, JPG, GIF up to 5 files</p>
+                <p className="text-xs text-gray-400">JPG/PNG allowed. Upload 3 to 5 files.</p>
               </div>
               <input
                 id="photos"
