@@ -1,8 +1,7 @@
-# 🏁 Brats & Bavaria
 
-<img src="public/logo.png" alt="Brats & Bavaria Logo" width="200"/>
+<img src="public/logo.png" alt="Brats & Bavaria Logo" width="400"/>
 
-A modern web platform for German car event submissions.
+A modern web platform for German car event submissions.  
 Built to simplify the car selection and event registration process with a clean submission form, image handling, admin dashboard, email flow, and Stripe payment integration.
 
 ---
@@ -52,7 +51,7 @@ Here are some previews of the main pages:
 
 ## 💡 Motivation
 
-This project was built to support a real-world car show. 
+This project was built to support a real-world car show.     
 Previously, organizers used a mix of Google Forms, manual email approvals, and e-transfer payments — a slow, error-prone workflow. This app replaces that entire process with a single streamlined platform that handles photo submissions, admin review, payment tracking, and communication — all in one place.
 
 
