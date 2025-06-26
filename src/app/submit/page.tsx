@@ -71,7 +71,7 @@ const Submit = () => {
     });
 
     const data = await res.json();
-    return data.secure_url; // return uploaded image URL
+    return `${data.secure_url}?f_auto&q_auto`; // Optimized image URL
   };
 
   // Handles form submission
