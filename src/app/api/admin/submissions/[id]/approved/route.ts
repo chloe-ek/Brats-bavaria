@@ -32,7 +32,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
           price_data: {
             currency: 'cad',
             product_data: {
-              name: 'Car display ticket',
+              name: 'Car Display Ticket',
               description: 'Brats and Bavaria 2025',
               images: ['https://bratsandbavaria.com/approve.png'],
             },
