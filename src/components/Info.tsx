@@ -14,7 +14,7 @@ const Info = () => {
             Event Info
           </h2>
           <p className="text-sm sm:text-base font-sans mb-8 sm:mb-10 leading-relaxed max-w-2xl">
-            Find us at Classic Garage in Richnmod. Check the cards below to learn more
+            Find us at Classic Garage in Richmond. Check the cards below to learn more
             about the event experience and schedule.
           </p>
 
