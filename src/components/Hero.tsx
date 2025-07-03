@@ -43,7 +43,7 @@ const Hero = () => {
               Be Part of the Experience
             </h2>
             <p className="text-sm sm:text-md font-sans mb-4 sm:mb-5">
-              Join us for a weekend: Category awards, German beer,
+              Join us for a weekend: Category awards,
               Bratwurst/German food, Sponsor booths, live DJ and more!
             </p>
             <p className="text-sm sm:text-md font-Montserrat font-bold mb-4 sm:mb-5">
