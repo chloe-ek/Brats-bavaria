@@ -72,19 +72,15 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     
 
     await resend.emails.send({
-      from: 'events@bratsandbavaria.com',
+      from: 'Brats & Bavaria <events@bratsandbavaria.com>',
       to: email,
       subject: 'You’ve been approved!',
-      html: `
-        
-        <p>Hi ${name},</p>
-        <p>Congratulations – your car has been approved for the event!</p>
-        <p>Please complete your registration by paying the event fee below:</p>
-        <p><a href="${paymentLink.url}" style="color: blue;">Click here to pay $42</a></p>
-        <p>Thanks,<br />Brats & Bavaria</p>
-        <img src="https://bratsandbavaria.com/approve.png" alt="Approved Car" width="500" style="max-width: 100%; height: auto;" />
-
-      `,
+      html: `<p>Hi ${name},</p>
+              <p>Congratulations – your car has been approved for the event!</p>
+              <p>Please complete your registration by paying the event fee below:</p>
+              <p><a href="${paymentLink.url}" style="background:#007cba;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;display:inline-block">Click here to pay $42 CAD</a></p>
+              <p>Thanks,<br/>Brats & Bavaria</p>
+              <img src="https://bratsandbavaria.com/approve.png" alt="Car" style="max-width:100%;height:auto" width="400"/>`
     });
 
     return NextResponse.json({ 
