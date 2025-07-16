@@ -80,7 +80,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
               <p>Please complete your registration by paying the event fee below:</p>
               <p><a href="${paymentLink.url}" style="background:#007cba;color:white;padding:10px 20px;text-decoration:none;border-radius:5px;display:inline-block">Click here to pay $42 CAD</a></p>
               <p>Thanks,<br/>Brats & Bavaria</p>
-              <img src="https://bratsandbavaria.com/approve.png" alt="Car" style="max-width:100%;height:auto" width="400"/>`
+              <img src="https://bratsandbavaria.com/approve.png" alt="Approved Car" style="max-width:100%;height:auto"/>`
     });
 
     return NextResponse.json({ 
