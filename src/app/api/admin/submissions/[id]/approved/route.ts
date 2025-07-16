@@ -82,7 +82,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         <p>Please complete your registration by paying the event fee below:</p>
         <p><a href="${paymentLink.url}" style="color: blue;">Click here to pay $42</a></p>
         <p>Thanks,<br />Brats & Bavaria</p>
-        <img src="https://bratsandbavaria.com/approve.png" alt="Approved Car" width="500" />
+        <img src="https://bratsandbavaria.com/approve.png" alt="Approved Car" width="500" style="max-width: 100%; height: auto;" />
 
       `,
     });
