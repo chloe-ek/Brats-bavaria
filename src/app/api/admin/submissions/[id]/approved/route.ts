@@ -24,7 +24,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     })
     
     const session = await stripe.checkout.sessions.create({
-      expires_at: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60),  // expires in 7 days
       payment_method_types: ['card'],
       mode: 'payment',
       customer: customer.id,
@@ -60,7 +59,6 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         <p>Congratulations – your car has been approved for the event!</p>
         <p>Please complete your registration by paying the event fee below:</p>
         <p><a href="${session.url}" style="color: blue;">Click here to pay $42</a></p>
-        <p><strong>Important:</strong> This payment link expires in 30 days (${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}).</p>
         <p>Thanks,<br />Brats & Bavaria</p>
         <img src="https://bratsandbavaria.com/approve.png" alt="Approved Car" width="500" />
 
