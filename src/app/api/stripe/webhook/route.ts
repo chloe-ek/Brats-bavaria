@@ -25,7 +25,19 @@ export async function POST(req: Request) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
+
     const submissionId = session.metadata?.submissionId;
+    const customerId = session.metadata?.customerId;
+    const userEmail = session.metadata?.userEmail;
+    const userName = session.metadata?.userName;
+
+    console.log('Payment completed:', {
+      submissionId,
+      customerId,
+      userEmail,
+      userName,
+      paymentIntentId: session.payment_intent
+    });
 
     if (submissionId) {
       const { error } = await adminDb

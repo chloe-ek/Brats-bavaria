@@ -9,6 +9,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     const { email, name } = await request.json();
     const { id } = await context.params;
 
+    // Update the approval status
     const { error } = await adminDb
       .from('submissions')
       .update({ status: 'approved' })
@@ -18,35 +19,56 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
       return NextResponse.json({ error: 'Failed to update approval status' }, { status: 500 });
     }
 
+    // Create a Stripe customer
     const customer = await stripe.customers.create({
       email,
-      name
+      name,
+      metadata: {
+        submissionId: id, 
+      },
     })
+
+    const product = await stripe.products.create({
+      name: 'Car Display Ticket',
+      description: 'Brats and Bavaria 2025',
+      images: ['https://bratsandbavaria.com/approve.png'],
+    });
+
+    const price = await stripe.prices.create({
+      product: product.id,
+      unit_amount: 4200,
+      currency: 'cad',
+    });
     
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
-      customer: customer.id,
+    // Create a Stripe Payment link
+    const paymentLink = await stripe.paymentLinks.create({
       line_items: [
         {
-          price_data: {
-            currency: 'cad',
-            product_data: {
-              name: 'Car Display Ticket',
-              description: 'Brats and Bavaria 2025',
-              images: ['https://bratsandbavaria.com/approve.png'],
-            },
-            unit_amount: 4200,
-          },
+          price: price.id, 
           quantity: 1,
         },
       ],
       metadata: {
-        submissionId: id, 
+        submissionId: id,
+        customerId: customer.id,
+        userEmail: email,
+        userName: name
       },
-      success_url: 'https://bratsandbavaria.com/payment-success',
-      cancel_url: 'https://bratsandbavaria.com/payment-cancel',
+      after_completion: {
+        type: 'redirect',
+        redirect: {
+          url: 'https://bratsandbavaria.com/payment-success'
+        }
+      },
     });
+
+
+    await adminDb
+      .from('submissions')
+      .update({
+         payment_link_id: paymentLink.id,
+         payment_link_url: paymentLink.url,})
+      .eq('id', id);
     
 
     await resend.emails.send({
@@ -58,14 +80,20 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         <p>Hi ${name},</p>
         <p>Congratulations – your car has been approved for the event!</p>
         <p>Please complete your registration by paying the event fee below:</p>
-        <p><a href="${session.url}" style="color: blue;">Click here to pay $42</a></p>
+        <p><a href="${paymentLink.url}" style="color: blue;">Click here to pay $42</a></p>
         <p>Thanks,<br />Brats & Bavaria</p>
         <img src="https://bratsandbavaria.com/approve.png" alt="Approved Car" width="500" />
 
       `,
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ 
+      success: true,
+      paymentLinkUrl: paymentLink.url,
+      paymentLinkId: paymentLink.id,
+      customerId: customer.id
+    });
+
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: 'Failed to process approval workflow' }, { status: 500 });
