@@ -17,6 +17,28 @@ const Submit = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (confirmEmail && e.target.value !== confirmEmail) {
+      setEmailError("Emails do not match");
+     } else {
+        setEmailError("");
+      }
+  };
+
+  const handleConfirmEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmEmail(e.target.value);
+    if (email && e.target.value !== email) {
+      setEmailError("Emails do not match");
+    } else {
+      setEmailError("");
+    }
+  };
+
 
   // Handles photo file selection
   const handleFileChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,6 +101,11 @@ const Submit = () => {
     e.preventDefault();
     console.log('📤 handleSubmit triggered');
 
+    if (email !== confirmEmail) {
+      setEmailError("Emails do not match");
+      return;
+    }
+
     if (selectedFiles.length < 3 || selectedFiles.length > 5) {
       toast.error("Please upload between 3 and 5 photos.");
       return;
@@ -96,7 +123,7 @@ const Submit = () => {
     // Create payload to send to API (DB)
     const payload = {
       name: formData.get("name"),
-      email: formData.get("email"),
+      email: email,
       phone: formData.get("phone"),
       make: formData.get("make"),
       model: formData.get("model"),
@@ -167,19 +194,7 @@ const Submit = () => {
             />
           </div>
 
-
           <div>
-            <label className="block text-sm mb-1" htmlFor="email">Email</label>
-            <input
-              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
-              type="email"
-              id="email"
-              name="email"
-              required
-            />
-          </div>
-
-          <div className="md:col-span-2">
             <label className="block text-sm mb-1" htmlFor="phone">Phone Number</label>
             <input
               className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
@@ -188,6 +203,29 @@ const Submit = () => {
               name="phone"
             />
           </div>
+
+
+          <div>
+            <label className="block text-sm mb-1" htmlFor="email">Email</label>
+            <input
+              className="w-full p-2 sm:p-3   bg-gray-800 text-white border border-gray-600"
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={handleEmailChange}
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm mb-1" htmlFor="confirmEmail">Confirm Email</label>
+            <input className={`w-full p-2 sm:p-3 bg-gray-800 text-white border ${emailError ? 'border-red-500' : 'border-gray-600'}`}
+            type="email" id="confirmEmail" value={confirmEmail} onChange={handleConfirmEmailChange} required />
+            {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
+          </div>
+
+          
 
           {/* Car Info */}
           <div className="col-span-1 md:col-span-2">
