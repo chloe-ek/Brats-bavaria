@@ -47,7 +47,7 @@ const Hero = () => {
               Bratwurst/German food, Sponsor booths, live DJ and more!
             </p>
             <p className="text-sm sm:text-md font-Montserrat font-bold mb-4 sm:mb-5">
-              Sunday, August 24th, 2025
+              Sunday, August 24th, 2025 <span className="px-2">|</span> 10AM–2PM
             </p>
             <p className="text-sm sm:text-md font-sans mb-4 sm:mb-5">
               Vehicles on display will need to arrive approx 1 hour before the
