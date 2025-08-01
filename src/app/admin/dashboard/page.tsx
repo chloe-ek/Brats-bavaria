@@ -16,12 +16,33 @@ const AdminDashboard = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const [filter, setFilter] = useState<'all' | 'approved'>('all');
+  const [filter, setFilter] = useState<'all' | 'approved' | string>('all');
 
-  const filteredSubmissions =
-  filter === 'approved'
-    ? submissions.filter((sub) => sub.status?.toLowerCase() === 'approved')
-    : submissions;
+  // Extend filter type to include specific brand names
+  const approvedSubmissions = submissions.filter((sub) => sub.status?.toLowerCase() === 'approved');
+
+  // Group approved submissions by brand and count them
+  const brandCounts = approvedSubmissions.reduce((acc, sub) => {
+    const brand = sub.car_make;
+    if (brand) {
+      acc[brand] = (acc[brand] || 0) + 1;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+  
+  // Get sorted brand names for consistent display order
+  const sortedBrands = Object.keys(brandCounts).sort();
+  
+  // Filter submissions
+  const filteredSubmissions = (() => {
+    if (filter === 'all') {
+      return submissions;
+    } else if (filter === 'approved') {
+      return approvedSubmissions;
+    } else {
+      return approvedSubmissions.filter((sub) => sub.car_make === filter);
+    }
+  }) ();
 
   // Check if current user is admin
   useEffect(() => {
@@ -107,6 +128,16 @@ const AdminDashboard = () => {
                 }
                 )
               </button>
+
+              {sortedBrands.map((brand) => (
+                <button
+                  key={brand}
+                  onClick={() => setFilter(brand)}
+                  className={`px-4 py-2 border ${filter === brand ? 'bg-purple-600 text-white' : 'bg-gray-800 text-gray-300'}`}
+                >
+                  {brand} ({brandCounts[brand]})
+                </button>
+              ))}
             </div>
 
             <table className="w-full border-collapse text-sm">
