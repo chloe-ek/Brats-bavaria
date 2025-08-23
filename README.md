@@ -51,6 +51,7 @@ Here are some previews of the main pages:
 | Contact Us   | <img src="./screenhosts/contactus.png" width="300"/> |
 | Submit       | <img src="./screenhosts/submit.png" width="300"/> |
 | About Us     | <img src="./screenhosts/aboutus.png" width="300"/> |
+| Admin Page   | <img src="./screenhosts/admin.png" width="300"/> |
 
 ---
 
