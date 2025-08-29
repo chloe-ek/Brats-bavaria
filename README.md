@@ -26,6 +26,19 @@ Built to simplify the car selection and event registration process with a clean 
 
 ---
 
+**🧪 Testing**
+* **Framework:** Jest + React Testing Library
+* **Coverage:** API routes, form validation, payment processing
+
+**✅ Key Features Tested**
+* Email confirmation validation
+* Photo upload limits (3-5 photos)
+* Payment webhook event handling
+* Database structure validation
+* Admin configuration checks
+
+---
+
 ## ✨ Features  
 - 📝 Submission form with car details, contact info, and custom questions  
 - 📷 Upload 3–5 photos (auto-compressed + stored in Cloudinary)  
@@ -69,14 +82,15 @@ Previously, organizers used a mix of Google Forms, manual email approvals, and e
 
 ```txt
 src/
-  ├── app/           # App routes (submit form, admin dashboard, static pages, API routes)
+  ├── app/           # App routes (submit form, admin dashboard, static pages, API routes) with tests
   ├── components/    # Reusable UI components
   ├── lib/           # Supabase client, admin, and DB logic
   ├── types/         # Database and API response types
   └── utils/         # External service handlers (Resend, Stripe)
 
 public/              # Static assets (images, screenshots, etc.)
-
+jest.config.js       # Jest testing configuration  
+jest.setup.js        # Test environment setup
 next.config.ts       # Next.js configuration  
 tailwind.config.js   # Tailwind CSS setup  
 package.json         # Project metadata and scripts
