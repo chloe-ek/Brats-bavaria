@@ -26,9 +26,14 @@ Built to simplify the car selection and event registration process with a clean 
 
 ---
 
-**🧪 Testing**
+## 🧪 Testing**
 * **Framework:** Jest + React Testing Library
 * **Coverage:** API routes, form validation, payment processing
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/b6426c00-aae7-45f0-a9d6-9b352581ea24" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/546e04dc-bd02-4173-9866-ffce48480b78" width="45%"/>
+</p>
 
 **✅ Key Features Tested**
 * Email confirmation validation
