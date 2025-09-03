@@ -61,6 +61,7 @@ const Submit = () => {
     // save valid files to state
     setFileError("");
 
+    // 1. Image Optimization
     const compressedFiles = await Promise.all(
       Array.from(files).map(async (file) => {
         const options = {
@@ -81,7 +82,7 @@ const Submit = () => {
     
   };
   
-
+  // 2. Upload to Cloudinary
   const uploadToCloudinary = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -99,7 +100,6 @@ const Submit = () => {
   // Handles form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('📤 handleSubmit triggered');
 
     if (email !== confirmEmail) {
       setEmailError("Emails do not match");
