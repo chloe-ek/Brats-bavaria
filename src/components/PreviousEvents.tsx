@@ -1,76 +1,88 @@
 import Image from 'next/image'
 
 const events = [
-
-  {
-    date: '11 JUNE 2024',
-    title: 'Brats and Bavaria 2024',
-    location: 'Richmond, BC',
-  },
-  {
-    date: '25 JUNE 2023',
-    title: 'Brats and Bavaria 2023',
-    location: 'Richmond, BC',
-  },
-  {
-    date: '28 AUG 2022',
-    title: 'Brats and Bavaria 2022',
-    location: 'Richmond, BC',
-  },
+  { index: '01', year: '2025', date: 'AUG 24', title: 'Brats and Bavaria 2025', location: 'Richmond, BC' },
+  { index: '02', year: '2024', date: 'JUNE 11', title: 'Brats and Bavaria 2024', location: 'Richmond, BC' },
+  { index: '03', year: '2023', date: 'JUNE 25', title: 'Brats and Bavaria 2023', location: 'Richmond, BC' },
+  { index: '04', year: '2022', date: 'AUG 28',  title: 'Brats and Bavaria 2022', location: 'Richmond, BC' },
 ]
 
 const PreviousEvents = () => {
   return (
     <div
       className="w-full text-white"
-      style={{
-        background: `linear-gradient(180deg, #111518 0%, #111518 20%, #262626 100%)`,
-      }}
+      style={{ background: 'linear-gradient(180deg, #111518 0%, #111518 20%, #262626 100%)' }}
     >
       <section
         id="previous"
         className="px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 max-w-[1400px] mx-auto scroll-mt-24"
       >
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 font-Montserrat mt-4 sm:mt-8">
-          Previous Events
-        </h2>
-        <p className="text-sm sm:text-base font-sans mb-8 sm:mb-10 leading-relaxed max-w-2xl">
-          Throwback to our previous events in Richmond, BC. Thank you to all participants and sponsors.
-        </p>
-
-        <div className="h-[1px] bg-white/10 w-full mb-8 sm:mb-12" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-start">
-          {/* Event List */}
-          <div className="space-y-6 sm:space-y-8 md:space-y-10">
-            {events.map((event, index) => {
-              const [day, month, year] = event.date.split(' ')
-              return (
-                <div key={index} className="flex items-center gap-4 sm:gap-6 min-h-[60px] sm:min-h-[80px] p-3 sm:p-4">
-                  <div className="flex flex-col items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white/5 border border-[#424242] text-xs sm:text-sm font-bold">
-                    <span>{day}</span>
-                    <span>{month}</span>
-                    <span>{year}</span>
-                  </div>
-
-                  <div className="flex flex-col justify-center">
-                    <h3 className="font-semibold text-base sm:text-lg">{event.title}</h3>
-                    <p className="text-xs sm:text-sm text-gray-300">{event.location}</p>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-
-          {/* Image Grid */}
-          <div className="grid grid-cols-2 grid-rows-2 gap-3 sm:gap-4">
-            {['/meet.jpg', '/cars2.jpeg', '/people.jpeg', '/showcase.png'].map((src, i) => (
-              <div key={i} className="w-full h-[160px] md:h-[200px] lg:h-[220px] relative overflow-hidden shadow-lg hover:scale-[1.03] transition">
-                <Image src={src} alt={`Previous event ${i + 1}`} fill className="object-cover" />
-              </div>
-            ))}
-          </div>
+        {/* Header */}
+        <div className="flex items-end justify-between mt-4 sm:mt-8 mb-2">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-BebasNeue tracking-wide leading-none">
+            Previous Events
+          </h2>
+          <span className="text-white/30 font-sans text-xs tracking-widest uppercase hidden sm:block">
+            Richmond, BC
+          </span>
         </div>
+
+        <div className="h-px bg-white/15 w-full mt-4 mb-0" />
+
+        {/* Event list */}
+        <div className="mb-14 sm:mb-20">
+          {events.map((event) => (
+            <div
+              key={event.index}
+              className="group flex items-center gap-6 sm:gap-10 py-5 sm:py-6 border-b border-white/10 hover:border-white/30 transition-colors duration-300"
+            >
+              {/* Index */}
+              <span className="text-white/20 font-sans text-xs tracking-widest w-6 shrink-0">
+                {event.index}
+              </span>
+
+              {/* Year */}
+              <span
+                className="font-BebasNeue text-white/25 group-hover:text-white/50 transition-colors duration-300 shrink-0 leading-none"
+                style={{ fontSize: 'clamp(0.8rem, 1.5vw, 1.2rem)' }}
+              >
+                {event.year}
+              </span>
+
+              {/* Title */}
+              <span
+                className="font-BebasNeue text-white group-hover:tracking-wider transition-all duration-500 flex-1 leading-none"
+                style={{ fontSize: 'clamp(0.8rem, 1.0vw, 1.0rem)', letterSpacing: '0.14em' }}
+              >
+                {event.title}
+              </span>
+
+              {/* Date */}
+              <span className="text-white/40 font-sans text-xs tracking-widest uppercase shrink-0 hidden sm:block">
+                {event.date}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Image grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+          {['/meet.jpg', '/cars2.jpeg', '/people.jpeg', '/showcase.png'].map((src, i) => (
+            <div
+              key={i}
+              className="relative overflow-hidden"
+              style={{ aspectRatio: '4/3' }}
+            >
+              <Image
+                src={src}
+                alt={`Previous event ${i + 1}`}
+                fill
+                className="object-cover hover:scale-105 transition-all duration-500"
+              />
+            </div>
+          ))}
+        </div>
+
       </section>
     </div>
   )

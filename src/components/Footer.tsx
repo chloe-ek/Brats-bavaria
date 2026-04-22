@@ -18,7 +18,7 @@ const Footer = () => {
 
           {/* Instagram */}
           <a
-            href="https://instagram.com/bratsandbavaria"
+            href="https://instagram.com/bratsnbavaria"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"

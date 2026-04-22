@@ -10,7 +10,7 @@ const Info = () => {
         className="text-white px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 max-w-[1400px] mx-auto"
       >
         <div className="mx-auto">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 font-Montserrat mt-4 sm:mt-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4 font-BebasNeue tracking-wide mt-4 sm:mt-8">
             Event Info
           </h2>
           <p className="text-sm sm:text-base font-sans mb-8 sm:mb-10 leading-relaxed max-w-2xl">
@@ -33,7 +33,7 @@ const Info = () => {
                 className="w-full h-64 md:h-80 object-cover"
               />
               <div className="p-4 sm:p-6">
-                <h3 className="text-lg sm:text-xl font-semibold font-Montserrat mb-2">
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">
                   Meet & Park
                 </h3>
                 <p className="text-sm text-white/80 leading-relaxed">
