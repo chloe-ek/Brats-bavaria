@@ -3,87 +3,105 @@
 import Footer from "@/components/Footer";
 import Nav from "@/components/Nav";
 import imageCompression from 'browser-image-compression';
+import Image from "next/image";
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from 'react-hot-toast';
 
-
 const Submit = () => {
-
   const router = useRouter();
 
-  const [fileError, setFileError] = useState("");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [previews, setPreviews] = useState<string[]>([]);
+  const [isCompressing, setIsCompressing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<{ current: number; total: number } | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const [email, setEmail] = useState("");
   const [confirmEmail, setConfirmEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
+
+  const previewsRef = useRef<string[]>([]);
+
+  // Clean up preview object URLs on unmount or file change
+  useEffect(() => {
+    return () => {
+      previewsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, []);
+
+  useEffect(() => {
+    if (submitSuccess) router.push('/submit/success');
+  }, [submitSuccess, router]);
+
+  const clearError = (field: string) => {
+    setFormErrors((prev) => {
+      if (!prev[field]) return prev;
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
+  };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+    clearError('email');
     if (confirmEmail && e.target.value !== confirmEmail) {
-      setEmailError("Emails do not match");
-     } else {
-        setEmailError("");
-      }
+      setFormErrors((prev) => ({ ...prev, confirmEmail: 'Emails do not match' }));
+    } else {
+      clearError('confirmEmail');
+    }
   };
 
   const handleConfirmEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setConfirmEmail(e.target.value);
     if (email && e.target.value !== email) {
-      setEmailError("Emails do not match");
+      setFormErrors((prev) => ({ ...prev, confirmEmail: 'Emails do not match' }));
     } else {
-      setEmailError("");
+      clearError('confirmEmail');
     }
   };
 
-
-  // Handles photo file selection
-  const handleFileChange = async(e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files) return;
 
     if (files.length < 3) {
-      toast.error("Please upload at least 3 photos. ");
-      setSelectedFiles([]); // Clear selected files
-      e.target.value = "";  // Clear input value
+      toast.error("Please upload at least 3 photos.");
+      e.target.value = "";
       return;
     }
-
     if (files.length > 5) {
       toast.error("You can upload up to 5 photos only.");
-      setSelectedFiles([]); 
-      e.target.value = "";  
+      e.target.value = "";
       return;
     }
-    // save valid files to state
-    setFileError("");
 
-    // 1. Image Optimization
+    clearError('photos');
+    setIsCompressing(true);
+
     const compressedFiles = await Promise.all(
       Array.from(files).map(async (file) => {
-        const options = {
-          maxSizeMB: 1,
-          maxWidthOrHeight: 1920,
-          useWebWorker: true,
-        };
         try {
-          const compressedFile = await imageCompression(file, options);
-          return compressedFile;
-        } catch (error) {
-          console.error("Image compression error:", error);
+          return await imageCompression(file, { maxSizeMB: 1, maxWidthOrHeight: 1920, useWebWorker: true });
+        } catch {
           return file;
         }
       })
     );
+
+    // Generate preview URLs
+    previewsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    const newPreviews = compressedFiles.map((f) => URL.createObjectURL(f));
+    previewsRef.current = newPreviews;
+
     setSelectedFiles(compressedFiles);
-    
+    setPreviews(newPreviews);
+    setIsCompressing(false);
   };
-  
-  // 2. Upload to Cloudinary
-  const uploadToCloudinary = async (file: File) => {
+
+  const uploadToCloudinary = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "car_photo_upload");
@@ -92,79 +110,83 @@ const Submit = () => {
       method: "POST",
       body: formData,
     });
-
     const data = await res.json();
-    return `${data.secure_url}?f_auto&q_auto`; // Optimized image URL
+    return `${data.secure_url}?f_auto&q_auto`;
   };
 
-  // Handles form submission
+  const validate = (formData: FormData): Record<string, string> => {
+    const errors: Record<string, string> = {};
+    if (!formData.get('name')) errors.name = 'Name is required';
+    if (!email) errors.email = 'Email is required';
+    if (email !== confirmEmail) errors.confirmEmail = 'Emails do not match';
+    if (!formData.get('make')) errors.make = 'Please select a brand';
+    if (!formData.get('model')) errors.model = 'Model is required';
+    if (!formData.get('year')) errors.year = 'Year is required';
+    if (selectedFiles.length < 3) errors.photos = 'Please upload at least 3 photos';
+    return errors;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (email !== confirmEmail) {
-      setEmailError("Emails do not match");
-      return;
-    }
-
-    if (selectedFiles.length < 3 || selectedFiles.length > 5) {
-      toast.error("Please upload between 3 and 5 photos.");
-      return;
-    }
-    setIsSubmitting(true); 
-
-    try {
-    // Get form data
-    const form = e.currentTarget
+    const form = e.currentTarget;
     const formData = new FormData(form);
 
-    // Upload all photos to Cloudinary and get URLs
-    const photoUrls = await Promise.all(selectedFiles.map(uploadToCloudinary));
-
-    // Create payload to send to API (DB)
-    const payload = {
-      name: formData.get("name"),
-      email: email,
-      phone: formData.get("phone"),
-      make: formData.get("make"),
-      model: formData.get("model"),
-      year: formData.get("year"),
-      instagram: formData.get("instagram"),
-      comments: formData.get("comments"),
-      photos: photoUrls,
-    };
-      
-    // send to backend API 
-    const response = await fetch("/api/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-      
-    if (response.ok) {
-      setSubmitSuccess(true); // triggers redirects
-    } else {
-      const err = await response.json();
-      throw new Error(err.message || 'Submission failed');
+    const errors = validate(formData);
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      const firstErrorField = document.querySelector('[data-error]');
+      firstErrorField?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
     }
-  } catch (err) {
-    console.error(err)
-    toast.error("Submission failed. Please try again.");
-  } finally {
-    setIsSubmitting(false);
+
+    setIsSubmitting(true);
+    setUploadProgress({ current: 0, total: selectedFiles.length });
+
+    try {
+      // Upload photos one by one with progress
+      const photoUrls: string[] = [];
+      for (let i = 0; i < selectedFiles.length; i++) {
+        setUploadProgress({ current: i + 1, total: selectedFiles.length });
+        const url = await uploadToCloudinary(selectedFiles[i]);
+        photoUrls.push(url);
+      }
+
+      const payload = {
+        name: formData.get("name"),
+        email,
+        phone: formData.get("phone"),
+        make: formData.get("make"),
+        model: formData.get("model"),
+        year: formData.get("year"),
+        instagram: formData.get("instagram"),
+        questions: formData.get("comments"),
+        photos: photoUrls,
+      };
+
+      const response = await fetch("/api/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        setSubmitSuccess(true);
+      } else {
+        const err = await response.json();
+        throw new Error(err.message || 'Submission failed');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Submission failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+      setUploadProgress(null);
     }
   };
-
-  // Redirect on successful submit
-  useEffect(() => {
-    if (submitSuccess) {
-      router.push('/submit/success');
-    }
-  }, [submitSuccess, router]);
 
   const inputClass = "w-full bg-transparent border-b border-white/20 text-white text-sm py-3 px-0 outline-none focus:border-white/60 transition-colors duration-200 placeholder:text-white/20";
   const labelClass = "block text-white/40 uppercase tracking-[0.2em] text-xs mb-2";
+  const errorClass = "text-red-400 text-xs mt-2 tracking-wide";
 
   return (
     <div className="bg-[#111518] text-white min-h-screen flex flex-col">
@@ -199,7 +221,7 @@ const Submit = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-16">
+        <form onSubmit={handleSubmit} noValidate className="space-y-16">
 
           {/* Contact Info */}
           <div>
@@ -209,25 +231,39 @@ const Submit = () => {
               <span className="text-white/60 uppercase tracking-[0.25em] text-xs">Contact Information</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
-              <div>
-                <label className={labelClass} htmlFor="name">Name</label>
-                <input className={inputClass} type="text" id="name" name="name" required placeholder="Full name" />
+              <div data-error={formErrors.name ? true : undefined}>
+                <label className={labelClass} htmlFor="name">Name <span className="text-white/30">*</span></label>
+                <input
+                  className={`${inputClass} ${formErrors.name ? 'border-red-400' : ''}`}
+                  type="text" id="name" name="name"
+                  placeholder="Full name"
+                  onChange={() => clearError('name')}
+                />
+                {formErrors.name && <p className={errorClass}>{formErrors.name}</p>}
               </div>
               <div>
                 <label className={labelClass} htmlFor="phone">Phone Number</label>
                 <input className={inputClass} type="tel" id="phone" name="phone" placeholder="Optional" />
               </div>
-              <div>
-                <label className={labelClass} htmlFor="email">Email</label>
-                <input className={inputClass} type="email" id="email" name="email" value={email} onChange={handleEmailChange} required placeholder="your@email.com" />
-              </div>
-              <div>
-                <label className={labelClass} htmlFor="confirmEmail">Confirm Email</label>
+              <div data-error={formErrors.email ? true : undefined}>
+                <label className={labelClass} htmlFor="email">Email <span className="text-white/30">*</span></label>
                 <input
-                  className={`${inputClass} ${emailError ? "border-red-400" : ""}`}
-                  type="email" id="confirmEmail" value={confirmEmail} onChange={handleConfirmEmailChange} required placeholder="Repeat email"
+                  className={`${inputClass} ${formErrors.email ? 'border-red-400' : ''}`}
+                  type="email" id="email" name="email"
+                  value={email} onChange={handleEmailChange}
+                  placeholder="your@email.com"
                 />
-                {emailError && <p className="text-red-400 text-xs mt-2 tracking-wide">{emailError}</p>}
+                {formErrors.email && <p className={errorClass}>{formErrors.email}</p>}
+              </div>
+              <div data-error={formErrors.confirmEmail ? true : undefined}>
+                <label className={labelClass} htmlFor="confirmEmail">Confirm Email <span className="text-white/30">*</span></label>
+                <input
+                  className={`${inputClass} ${formErrors.confirmEmail ? 'border-red-400' : ''}`}
+                  type="email" id="confirmEmail"
+                  value={confirmEmail} onChange={handleConfirmEmailChange}
+                  placeholder="Repeat email"
+                />
+                {formErrors.confirmEmail && <p className={errorClass}>{formErrors.confirmEmail}</p>}
               </div>
             </div>
           </div>
@@ -240,9 +276,13 @@ const Submit = () => {
               <span className="text-white/60 uppercase tracking-[0.25em] text-xs">Car Information</span>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
-              <div>
-                <label className={labelClass} htmlFor="make">Make (Brand)</label>
-                <select id="make" name="make" className={inputClass} required>
+              <div data-error={formErrors.make ? true : undefined}>
+                <label className={labelClass} htmlFor="make">Make (Brand) <span className="text-white/30">*</span></label>
+                <select
+                  id="make" name="make"
+                  className={`${inputClass} ${formErrors.make ? 'border-red-400' : ''}`}
+                  onChange={() => clearError('make')}
+                >
                   <option value="" className="bg-[#111518]">Select Brand</option>
                   <option value="BMW" className="bg-[#111518]">BMW</option>
                   <option value="Mercedes-Benz" className="bg-[#111518]">Mercedes-Benz</option>
@@ -250,14 +290,27 @@ const Submit = () => {
                   <option value="Porsche" className="bg-[#111518]">Porsche</option>
                   <option value="Volkswagen" className="bg-[#111518]">Volkswagen</option>
                 </select>
+                {formErrors.make && <p className={errorClass}>{formErrors.make}</p>}
               </div>
-              <div>
-                <label className={labelClass} htmlFor="model">Model</label>
-                <input className={inputClass} type="text" id="model" name="model" required placeholder="e.g. M3, 911, RS6" />
+              <div data-error={formErrors.model ? true : undefined}>
+                <label className={labelClass} htmlFor="model">Model <span className="text-white/30">*</span></label>
+                <input
+                  className={`${inputClass} ${formErrors.model ? 'border-red-400' : ''}`}
+                  type="text" id="model" name="model"
+                  placeholder="e.g. M3, 911, RS6"
+                  onChange={() => clearError('model')}
+                />
+                {formErrors.model && <p className={errorClass}>{formErrors.model}</p>}
               </div>
-              <div>
-                <label className={labelClass} htmlFor="year">Year</label>
-                <input className={inputClass} type="number" id="year" name="year" required placeholder="e.g. 2021" />
+              <div data-error={formErrors.year ? true : undefined}>
+                <label className={labelClass} htmlFor="year">Year <span className="text-white/30">*</span></label>
+                <input
+                  className={`${inputClass} ${formErrors.year ? 'border-red-400' : ''}`}
+                  type="number" id="year" name="year"
+                  placeholder="e.g. 2021"
+                  onChange={() => clearError('year')}
+                />
+                {formErrors.year && <p className={errorClass}>{formErrors.year}</p>}
               </div>
               <div>
                 <label className={labelClass} htmlFor="instagram">Instagram / Website</label>
@@ -277,27 +330,48 @@ const Submit = () => {
               <div className="h-px flex-1 bg-white/10" />
               <span className="text-white/60 uppercase tracking-[0.25em] text-xs">Car Photos</span>
             </div>
+
             <label
               htmlFor="photos"
-              className="flex flex-col items-center justify-center w-full h-52 border border-dashed border-white/20 cursor-pointer hover:border-white/40 transition-colors duration-200"
+              data-error={formErrors.photos ? true : undefined}
+              className={`flex flex-col items-center justify-center w-full h-52 border border-dashed cursor-pointer transition-colors duration-200 ${
+                formErrors.photos ? 'border-red-400' : 'border-white/20 hover:border-white/40'
+              } ${isCompressing ? 'pointer-events-none' : ''}`}
             >
-              <svg className="w-7 h-7 mb-4 text-white/30" fill="none" viewBox="0 0 20 16" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5A5.5 5.5 0 0 0 5.2 5.02 4 4 0 0 0 5 13h2.2M10 15V6m0 0L8 8m2-2 2 2" />
-              </svg>
-              <p className="text-white/50 text-sm mb-1">
-                <span className="text-white/80">Click to upload</span> or drag and drop
-              </p>
-              <p className="text-white/30 text-xs uppercase tracking-widest">JPG / PNG · 3 to 5 files</p>
-              <input id="photos" name="photos" type="file" className="hidden" accept="image/*" multiple required onChange={handleFileChange} />
+              {isCompressing ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white/20 border-t-white/60 rounded-full animate-spin mb-4" />
+                  <p className="text-white/50 text-sm">Optimizing photos…</p>
+                </>
+              ) : (
+                <>
+                  <svg className="w-7 h-7 mb-4 text-white/30" fill="none" viewBox="0 0 20 16" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5A5.5 5.5 0 0 0 5.2 5.02 4 4 0 0 0 5 13h2.2M10 15V6m0 0L8 8m2-2 2 2" />
+                  </svg>
+                  <p className="text-white/50 text-sm mb-1">
+                    {selectedFiles.length > 0
+                      ? <span className="text-white/80">{selectedFiles.length} photo{selectedFiles.length > 1 ? 's' : ''} selected — click to change</span>
+                      : <><span className="text-white/80">Click to upload</span> or drag and drop</>
+                    }
+                  </p>
+                  <p className="text-white/30 text-xs uppercase tracking-widest">JPG / PNG · 3 to 5 files</p>
+                </>
+              )}
+              <input id="photos" name="photos" type="file" className="hidden" accept="image/*" multiple onChange={handleFileChange} />
             </label>
-            {selectedFiles.length > 0 && (
-              <ul className="mt-4 space-y-1">
-                {selectedFiles.map((file, idx) => (
-                  <li key={idx} className="text-xs text-white/40 tracking-wide">{file.name}</li>
+
+            {formErrors.photos && <p className={errorClass}>{formErrors.photos}</p>}
+
+            {/* Photo previews */}
+            {previews.length > 0 && !isCompressing && (
+              <div className="mt-4 grid grid-cols-3 sm:grid-cols-5 gap-2">
+                {previews.map((src, idx) => (
+                  <div key={idx} className="relative aspect-square">
+                    <Image src={src} alt={`Preview ${idx + 1}`} fill sizes="(max-width: 640px) 33vw, 20vw" className="object-cover" />
+                  </div>
                 ))}
-              </ul>
+              </div>
             )}
-            {fileError && <p className="text-red-400 text-xs mt-2 tracking-wide">{fileError}</p>}
           </div>
 
           {/* Submit */}
@@ -305,16 +379,27 @@ const Submit = () => {
             <div className="h-px bg-white/10 mb-10" />
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isCompressing}
               className={`group flex items-center gap-3 border border-white/40 text-white text-xs font-sans font-semibold tracking-widest uppercase px-8 py-4 hover:bg-white hover:text-black transition-all duration-300 ${
-                isSubmitting ? "opacity-40 cursor-not-allowed" : "cursor-pointer"
+                isSubmitting || isCompressing ? "opacity-40 cursor-not-allowed" : "cursor-pointer"
               }`}
             >
-              {isSubmitting ? "Submitting..." : "Submit Application"}
+              {isSubmitting ? "Submitting…" : "Submit Application"}
               {!isSubmitting && <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>}
             </button>
-            {isSubmitting && (
-              <p className="mt-4 text-xs text-white/40 uppercase tracking-widest">Uploading photos, please wait…</p>
+
+            {isSubmitting && uploadProgress && (
+              <div className="mt-4 space-y-2">
+                <p className="text-xs text-white/40 uppercase tracking-widest">
+                  Uploading photo {uploadProgress.current} of {uploadProgress.total}…
+                </p>
+                <div className="w-48 h-px bg-white/10">
+                  <div
+                    className="h-px bg-white/50 transition-all duration-300"
+                    style={{ width: `${(uploadProgress.current / uploadProgress.total) * 100}%` }}
+                  />
+                </div>
+              </div>
             )}
           </div>
 

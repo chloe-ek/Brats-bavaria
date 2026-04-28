@@ -79,15 +79,3 @@ SELECT
   submitted_at AS created_at
 FROM submissions_backup
 WHERE payment_status = 'paid';
-
--- ============================================================
--- Verify row counts before dropping the backup:
---   SELECT COUNT(*) FROM submissions_backup;
---   SELECT COUNT(*) FROM submissions;
---   SELECT COUNT(*) FROM applicants;
---   SELECT COUNT(*) FROM photos;
---   SELECT COUNT(*) FROM reviews;
---   SELECT COUNT(*) FROM payments;
---
--- When satisfied: DROP TABLE submissions_backup;
--- ============================================================
