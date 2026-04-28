@@ -9,79 +9,70 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 
-
 const AdminDashboard = () => {
   const router = useRouter();
   const supabase = createClientComponentClient();
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [allSubmissions, setAllSubmissions] = useState<Submission[]>([]);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [filter, setFilter] = useState<'all' | 'approved' | string>('all');
 
-  // Extend filter type to include specific brand names
-  const approvedSubmissions = submissions.filter((sub) => sub.status?.toLowerCase() === 'approved');
+  // Derive available years from submissions
+  const availableYears = Array.from(
+    new Set(allSubmissions.map((s) => new Date(s.submitted_at).getFullYear()))
+  ).sort((a, b) => b - a);
 
-  // Group approved submissions by brand and count them
+  const submissions = selectedYear
+    ? allSubmissions.filter((s) => new Date(s.submitted_at).getFullYear() === selectedYear)
+    : allSubmissions;
+
+  const approvedSubmissions = submissions.filter((s) => s.status?.toLowerCase() === 'approved');
+
   const brandCounts = approvedSubmissions.reduce((acc, sub) => {
     const brand = sub.car_make;
-    if (brand) {
-      acc[brand] = (acc[brand] || 0) + 1;
-    }
+    if (brand) acc[brand] = (acc[brand] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
-  
-  // Get sorted brand names for consistent display order
-  const sortedBrands = Object.keys(brandCounts).sort();
-  
-  // Filter submissions
-  const filteredSubmissions = (() => {
-    if (filter === 'all') {
-      return submissions;
-    } else if (filter === 'approved') {
-      return approvedSubmissions;
-    } else {
-      return approvedSubmissions.filter((sub) => sub.car_make === filter);
-    }
-  }) ();
 
-  // Check if current user is admin
+  const sortedBrands = Object.keys(brandCounts).sort();
+
+  const filteredSubmissions = (() => {
+    if (filter === 'all') return submissions;
+    if (filter === 'approved') return approvedSubmissions;
+    return approvedSubmissions.filter((sub) => sub.car_make === filter);
+  })();
+
   useEffect(() => {
     const checkAdmin = async () => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-
-      if (error || !user) {
-        router.push('/admin/login');
-        return;
-      }
-
-      if (user.email !== 'admin@bratsandbavaria.com') { 
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error || !user) { router.push('/admin/login'); return; }
+      if (user.email !== 'admin@bratsandbavaria.com') {
         toast.error('Access denied');
         router.push('/admin/login');
         return;
       }
-
       setIsAuthorized(true);
       setLoading(false);
     };
-
     checkAdmin();
   }, [router, supabase]);
 
-  // Fetch submissions after auth
   useEffect(() => {
-    if (isAuthorized) {
-      fetchSubmissions();
-    }
+    if (isAuthorized) fetchSubmissions();
   }, [isAuthorized]);
 
   const fetchSubmissions = async () => {
     try {
       const res = await fetch('/api/admin/submissions');
       const data = await res.json();
-      setSubmissions(data.submissions || []);
+      const list: Submission[] = data.submissions || [];
+      setAllSubmissions(list);
+      // Default to most recent year
+      if (list.length > 0) {
+        const latestYear = Math.max(...list.map((s) => new Date(s.submitted_at).getFullYear()));
+        setSelectedYear(latestYear);
+      }
     } catch (err) {
       toast.error('Failed to fetch submissions');
       console.error(err);
@@ -101,34 +92,51 @@ const AdminDashboard = () => {
   return (
     <div className="bg-[#111518] text-white min-h-screen flex flex-col">
       <Nav />
-
       <main className="flex-1 px-6 py-10 w-full mx-auto">
         <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
 
-        {filteredSubmissions.length === 0 ? (
+        {/* Year selector */}
+        {availableYears.length > 0 && (
+          <div className="mb-6 flex gap-2">
+            <button
+              onClick={() => setSelectedYear(null)}
+              className={`px-4 py-2 text-sm border ${
+                selectedYear === null ? 'bg-white text-black border-white' : 'bg-gray-800 text-gray-300 border-gray-600'
+              }`}
+            >
+              All Years
+            </button>
+            {availableYears.map((year) => (
+              <button
+                key={year}
+                onClick={() => { setSelectedYear(year); setFilter('all'); }}
+                className={`px-4 py-2 text-sm border ${
+                  selectedYear === year ? 'bg-white text-black border-white' : 'bg-gray-800 text-gray-300 border-gray-600'
+                }`}
+              >
+                {year}
+              </button>
+            ))}
+          </div>
+        )}
 
+        {filteredSubmissions.length === 0 ? (
           <p>No submissions yet.</p>
         ) : (
           <div className="overflow-x-auto">
-            <div className="mb-4 flex gap-4">
+            <div className="mb-4 flex gap-4 flex-wrap">
               <button
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 border ${filter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-300'}`}
               >
                 All ({submissions.length})
               </button>
-
               <button
                 onClick={() => setFilter('approved')}
                 className={`px-4 py-2 border ${filter === 'approved' ? 'bg-green-700 text-white' : 'bg-gray-800 text-gray-300'}`}
               >
-                Approved (
-                {
-                  submissions.filter((sub) => sub.status?.toLowerCase() === 'approved').length
-                }
-                )
+                Approved ({approvedSubmissions.length})
               </button>
-
               {sortedBrands.map((brand) => (
                 <button
                   key={brand}
@@ -142,7 +150,7 @@ const AdminDashboard = () => {
 
             <table className="w-full border-collapse text-sm">
               <thead>
-              <tr className="bg-gray-800">
+                <tr className="bg-gray-800">
                   <th className="p-3 text-left">Name</th>
                   <th className="p-3 text-left">Car</th>
                   <th className="p-3 text-left">Status</th>
@@ -154,28 +162,30 @@ const AdminDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-              {filteredSubmissions.map((sub) => (
+                {filteredSubmissions.map((sub) => (
                   <tr key={sub.id} className="border-t border-gray-700">
-                    <td className="p-3">{sub.name}</td>
+                    <td className="p-3">{sub.applicant?.name}</td>
                     <td className="p-3">{sub.car_make} {sub.car_model} ({sub.car_year})</td>
                     <td className="p-3">
-                        <span
-                          className={`text-xs px-2 py-1 ${ sub.status === 'approved' ? 'bg-green-800'
-                              : sub.status === 'rejected'? 'bg-red-800': 'bg-gray-800'}`} >
-                          {sub.status === 'approved' ? 'approved' : sub.status === 'rejected' ? 'rejected': 'pending'}
-                        </span>
-                    </td>
-                    <td className="p-3">
-                      <span className={`text-xs px-2 py-1    ${sub.seen ? 'bg-gray-800' : 'bg-yellow-300 text-black'}`}>
-                        {sub.seen ? 'Seen' : 'New'}
+                      <span className={`text-xs px-2 py-1 ${
+                        sub.status === 'approved' ? 'bg-green-800'
+                        : sub.status === 'rejected' ? 'bg-red-800'
+                        : 'bg-gray-800'
+                      }`}>
+                        {sub.status ?? 'pending'}
                       </span>
                     </td>
                     <td className="p-3">
-                      <span className={`text-xs px-2 py-1    ${sub.payment_status === 'paid' ? 'bg-green-800' : 'bg-red-800'}`}>
-                        {sub.payment_status}
+                      <span className={`text-xs px-2 py-1 ${sub.review?.seen ? 'bg-gray-800' : 'bg-yellow-300 text-black'}`}>
+                        {sub.review?.seen ? 'Seen' : 'New'}
                       </span>
                     </td>
-                    <td className="p-3 text-xs">{sub.notes || '-'}</td>
+                    <td className="p-3">
+                      <span className={`text-xs px-2 py-1 ${sub.payment?.status === 'paid' ? 'bg-green-800' : 'bg-red-800'}`}>
+                        {sub.payment?.status ?? 'unpaid'}
+                      </span>
+                    </td>
+                    <td className="p-3 text-xs">{sub.review?.notes || '-'}</td>
                     <td className="p-3 text-xs">{new Date(sub.submitted_at).toLocaleString()}</td>
                     <td className="p-3">
                       <Link href={`/admin/submission/${sub.id}`} className="bg-blue-600 hover:bg-blue-700 px-3 py-1 text-xs">
@@ -189,7 +199,6 @@ const AdminDashboard = () => {
           </div>
         )}
       </main>
-
       <Footer />
     </div>
   );

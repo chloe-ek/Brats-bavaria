@@ -2,13 +2,13 @@ import { adminDb } from '@/lib/admin';
 import { stripe } from '@/utils/stripe';
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic'; 
+export const dynamic = 'force-dynamic';
 
 export const config = {
-    api: {
-      bodyParser: false,
-    },
-  };
+  api: {
+    bodyParser: false,
+  },
+};
 
 export async function POST(req: Request) {
   const body = await req.text();
@@ -25,33 +25,19 @@ export async function POST(req: Request) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
-
     const submissionId = session.metadata?.submissionId;
-    const customerId = session.metadata?.customerId;
-    const userEmail = session.metadata?.userEmail;
-    const userName = session.metadata?.userName;
-
-    console.log('Payment completed:', {
-      submissionId,
-      customerId,
-      userEmail,
-      userName,
-      paymentIntentId: session.payment_intent
-    });
 
     if (submissionId) {
       const { error } = await adminDb
-        .from('submissions')
+        .from('payments')
         .update({
-          payment_status: 'paid',
+          status: 'paid',
           paid_at: new Date().toISOString(),
         })
-        .eq('id', submissionId);
+        .eq('submission_id', submissionId);
 
       if (error) {
-        console.error('Failed to update Supabase:', error);
-      } else {
-        console.log('Supabase updated for submissionId:', submissionId);
+        console.error('Failed to update payment:', error);
       }
     }
   }

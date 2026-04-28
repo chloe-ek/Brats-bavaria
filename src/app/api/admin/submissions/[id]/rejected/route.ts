@@ -6,7 +6,7 @@ export async function POST(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  
+
   const { error } = await adminDb
     .from("submissions")
     .update({ status: "rejected" })
@@ -16,6 +16,13 @@ export async function POST(
     console.error('Database error:', error);
     return NextResponse.json({ error: "Failed to reject" }, { status: 500 });
   }
+
+  await adminDb
+    .from("reviews")
+    .upsert(
+      { submission_id: id, seen: true },
+      { onConflict: 'submission_id' }
+    );
 
   return NextResponse.json({ success: true });
 }

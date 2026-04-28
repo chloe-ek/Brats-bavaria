@@ -1,20 +1,21 @@
 describe('Admin Submissions API Tests', () => {
   it('should validate submission data structure', () => {
     const mockSubmission = {
-      id: 1,
-      name: 'Test User',
-      email: 'test@example.com',
+      id: 'uuid-123',
       car_make: 'BMW',
       car_model: 'M3',
-      payment_status: 'paid',
-      submitted_at: '2025-01-01T00:00:00Z'
+      car_year: 2022,
+      status: 'pending',
+      submitted_at: '2025-01-01T00:00:00Z',
+      applicant: { name: 'Test User', email: 'test@example.com' },
+      payment: { status: 'paid' },
     };
-    
+
     expect(mockSubmission.id).toBeDefined();
-    expect(mockSubmission.name).toBeDefined();
-    expect(mockSubmission.email).toBeDefined();
+    expect(mockSubmission.applicant.name).toBeDefined();
+    expect(mockSubmission.applicant.email).toBeDefined();
     expect(mockSubmission.car_make).toBeDefined();
-    expect(mockSubmission.payment_status).toBeDefined();
+    expect(mockSubmission.payment.status).toBeDefined();
   });
 
   it('should validate payment status values', () => {

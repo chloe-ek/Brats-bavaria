@@ -10,14 +10,9 @@ describe('Stripe Webhook Tests', () => {
   it('should validate required metadata fields', () => {
     const mockMetadata = {
       submissionId: '123',
-      customerId: 'cus_test',
-      userEmail: 'test@example.com',
-      userName: 'Test User'
     };
-    
+
     expect(mockMetadata.submissionId).toBeDefined();
-    expect(mockMetadata.userEmail).toBeDefined();
-    expect(mockMetadata.userName).toBeDefined();
   });
 
   it('should handle payment status updates', () => {

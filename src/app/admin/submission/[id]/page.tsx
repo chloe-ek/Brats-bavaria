@@ -14,13 +14,10 @@ const SubmissionDetail = () => {
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [notes, setNotes] = useState("");
-  const [modalUrl, setModalUrl] = useState<string | null>(null); // For image modal
+  const [modalUrl, setModalUrl] = useState<string | null>(null);
 
-  // Fetch the submission data by ID
   useEffect(() => {
-    if (id) {
-      fetchSubmission();
-    }
+    if (id) fetchSubmission();
   }, [id]);
 
   const fetchSubmission = async () => {
@@ -28,11 +25,8 @@ const SubmissionDetail = () => {
       const res = await fetch(`/api/admin/submissions/${id}`);
       const data = await res.json();
       if (!data.submission) throw new Error("Submission not found");
-
       setSubmission(data.submission);
-      setNotes(data.submission.notes || "");
-
-      // Mark the submission as seen
+      setNotes(data.submission.review?.notes || "");
       await fetch(`/api/admin/submissions/${id}/seen`, { method: "POST" });
     } catch (err) {
       toast.error("Failed to load submission");
@@ -42,20 +36,19 @@ const SubmissionDetail = () => {
     }
   };
 
-  // Handle approval or rejection
   const handleDecision = async (decision: "approved" | "rejected") => {
     try {
       const payload =
         decision === "approved"
-          ? { email: submission?.email, name: submission?.name }
-          : undefined ;
-  
+          ? { email: submission?.applicant?.email, name: submission?.applicant?.name }
+          : undefined;
+
       const res = await fetch(`/api/admin/submissions/${id}/${decision}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-  
+
       if (res.ok) {
         toast.success(`Submission ${decision}`);
         router.push("/admin/dashboard");
@@ -68,7 +61,6 @@ const SubmissionDetail = () => {
     }
   };
 
-  // Handle saving admin notes only
   const handleSaveNotes = async () => {
     try {
       const res = await fetch(`/api/admin/submissions/${id}/notes`, {
@@ -97,45 +89,50 @@ const SubmissionDetail = () => {
         <h1 className="text-3xl font-bold mb-6">Submission Detail</h1>
 
         <div className="mb-6 text-lg space-y-2">
-          <p><strong>Name:</strong> {submission.name}</p>
-          <p><strong>Email:</strong> {submission.email}</p>
-          <p><strong>Phone:</strong> {submission.phone}</p>
-          <p><strong>Instagram:</strong> {submission.instagram}</p>
+          <p><strong>Year:</strong> {new Date(submission.submitted_at).getFullYear()}</p>
+<p><strong>Name:</strong> {submission.applicant?.name}</p>
+          <p><strong>Email:</strong> {submission.applicant?.email}</p>
+          <p><strong>Phone:</strong> {submission.applicant?.phone}</p>
+          <p><strong>Instagram:</strong> {submission.applicant?.instagram}</p>
           <p><strong>Car:</strong> {submission.car_make} {submission.car_model} ({submission.car_year})</p>
           <p><strong>Questions:</strong> {submission.questions}</p>
           <p><strong>Status:</strong> {submission.status}</p>
-          <p><strong>Payment:</strong> {submission.payment_status}</p>
+          <p><strong>Payment:</strong> {submission.payment?.status ?? 'N/A'}</p>
           <p><strong>Submitted At:</strong> {new Date(submission.submitted_at).toLocaleString()}</p>
         </div>
 
         {/* Image grid with click-to-zoom modal */}
         <div className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {submission.photo_urls.map((url, index) => (
-            <div key={index} className="relative w-full h-64 cursor-pointer" onClick={() => setModalUrl(url)}>
-              <Image src={url} alt={`Photo ${index + 1}`} fill className="object-cover   " />
+          {submission.photos?.map((photo, index) => (
+            <div
+              key={photo.id}
+              className="relative w-full h-64 cursor-pointer"
+              onClick={() => setModalUrl(photo.url)}
+            >
+              <Image src={photo.url} alt={`Photo ${index + 1}`} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" />
             </div>
           ))}
         </div>
 
-        {/* Modal to display full-size image */}
+        {/* Modal */}
         {modalUrl && (
           <div
             className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center"
             onClick={() => setModalUrl(null)}
           >
             <div className="relative w-full max-w-4xl h-[80vh]">
-              <Image src={modalUrl} alt="Full image" fill className="object-contain" />
+              <Image src={modalUrl} alt="Full image" fill sizes="100vw" className="object-contain" />
             </div>
           </div>
         )}
 
-        {/* Admin Notes input */}
+        {/* Admin Notes */}
         <div className="mb-6">
           <label className="block text-lg font-medium mb-2">Notes</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full p-3 bg-gray-800 text-white border border-gray-600    text-base"
+            className="w-full p-3 bg-gray-800 text-white border border-gray-600 text-base"
             rows={4}
           />
           <button
@@ -151,13 +148,13 @@ const SubmissionDetail = () => {
           <div className="flex gap-4">
             <button
               onClick={() => handleDecision("approved")}
-              className="bg-green-600 px-4 py-2    hover:bg-green-700"
+              className="bg-green-600 px-4 py-2 hover:bg-green-700"
             >
               Approve
             </button>
             <button
               onClick={() => handleDecision("rejected")}
-              className="bg-red-600 px-4 py-2    hover:bg-red-700"
+              className="bg-red-600 px-4 py-2 hover:bg-red-700"
             >
               Reject
             </button>
@@ -165,7 +162,7 @@ const SubmissionDetail = () => {
           <div>
             <button
               onClick={() => router.push("/admin/dashboard")}
-              className="bg-gray-600 px-4 py-2    hover:bg-gray-700"
+              className="bg-gray-600 px-4 py-2 hover:bg-gray-700"
             >
               Back
             </button>

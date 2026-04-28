@@ -6,10 +6,13 @@ export async function POST(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
+
   const { error } = await adminDb
-    .from("submissions")
-    .update({ seen: true })
-    .eq("id", id);
+    .from("reviews")
+    .upsert(
+      { submission_id: id, seen: true },
+      { onConflict: 'submission_id' }
+    );
 
   if (error) {
     console.error('Database error:', error);
