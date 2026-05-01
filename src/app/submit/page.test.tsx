@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
 import Submit from './page';
@@ -33,7 +33,7 @@ describe('Submit Page', () => {
     render(<Submit />);
     
     expect(screen.getByLabelText(/name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/^email$/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/confirm email/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/phone/i)).toBeInTheDocument();
   });
@@ -41,7 +41,7 @@ describe('Submit Page', () => {
   it('should validate email confirmation matching', async () => {
     render(<Submit />);
     
-    const emailInput = screen.getByLabelText(/^email$/i);
+    const emailInput = screen.getByLabelText(/^email/i);
     const confirmEmailInput = screen.getByLabelText(/confirm email/i);
     
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -55,7 +55,7 @@ describe('Submit Page', () => {
   it('should clear email error when emails match', async () => {
     render(<Submit />);
     
-    const emailInput = screen.getByLabelText(/^email$/i);
+    const emailInput = screen.getByLabelText(/^email/i);
     const confirmEmailInput = screen.getByLabelText(/confirm email/i);
     
     // First set mismatched emails
@@ -88,7 +88,7 @@ describe('Submit Page', () => {
     fireEvent.change(fileInput, { target: { files } });
     
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Please upload at least 3 photos. ');
+      expect(toast.error).toHaveBeenCalledWith('Please upload at least 3 photos.');
     });
   });
 
@@ -111,26 +111,29 @@ describe('Submit Page', () => {
 
   it('should accept valid photo upload (3-5 photos)', async () => {
     render(<Submit />);
-    
+
     const fileInput = screen.getByLabelText(/upload 3 to 5 car photos/i);
-    
+
     // Create mock files (valid range)
     const files = [
       new File(['photo1'], 'photo1.jpg', { type: 'image/jpeg' }),
       new File(['photo2'], 'photo2.jpg', { type: 'image/jpeg' }),
       new File(['photo3'], 'photo3.jpg', { type: 'image/jpeg' })
     ];
-    
+
     fireEvent.change(fileInput, { target: { files } });
-    
-    // Should not show error toasts for valid file count
+
+    // Wait for async compression and state updates to complete
+    await waitFor(() => {
+      expect(screen.getByText(/3 photos selected/i)).toBeInTheDocument();
+    });
     expect(toast.error).not.toHaveBeenCalled();
   });
 
   it('should prevent form submission with mismatched emails', async () => {
     render(<Submit />);
     
-    const emailInput = screen.getByLabelText(/^email$/i);
+    const emailInput = screen.getByLabelText(/^email/i);
     const confirmEmailInput = screen.getByLabelText(/confirm email/i);
     const submitButton = screen.getByRole('button', { name: /submit/i });
     
