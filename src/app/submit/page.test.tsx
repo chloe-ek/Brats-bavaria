@@ -77,7 +77,7 @@ describe('Submit Page', () => {
   it('should validate minimum photo upload requirement', async () => {
     render(<Submit />);
     
-    const fileInput = screen.getByLabelText(/upload 3 to 5 car photos/i);
+    const fileInput = screen.getByLabelText(/3 to 5 files/i);
     
     // Create mock files (less than 3)
     const files = [
@@ -95,7 +95,7 @@ describe('Submit Page', () => {
   it('should validate maximum photo upload limit', async () => {
     render(<Submit />);
     
-    const fileInput = screen.getByLabelText(/upload 3 to 5 car photos/i);
+    const fileInput = screen.getByLabelText(/3 to 5 files/i);
     
     // Create mock files (more than 5)
     const files = Array.from({ length: 6 }, (_, i) => 
@@ -112,7 +112,7 @@ describe('Submit Page', () => {
   it('should accept valid photo upload (3-5 photos)', async () => {
     render(<Submit />);
 
-    const fileInput = screen.getByLabelText(/upload 3 to 5 car photos/i);
+    const fileInput = screen.getByLabelText(/3 to 5 files/i);
 
     // Create mock files (valid range)
     const files = [
