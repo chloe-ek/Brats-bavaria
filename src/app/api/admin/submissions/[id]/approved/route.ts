@@ -35,7 +35,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
     const product = await stripe.products.create({
       name: 'Car Display Ticket',
-      description: 'Brats and Bavaria 2025',
+      description: 'Brats and Bavaria 2026',
       images: ['https://bratsandbavaria.com/approve.png'],
     });
 

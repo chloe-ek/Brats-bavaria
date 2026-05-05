@@ -41,7 +41,11 @@ const Location = () => {
                 </div>
                 <div className="flex gap-3 items-start">
                   <Dot />
-                  <p>Free Admission</p>
+                  <p>Free Admission for viewing</p>
+                </div>
+                <div className="flex gap-3 items-start">
+                  <Dot />
+                  <p>Apply for a chance to display for your vehicle</p>
                 </div>
               </div>
             </div>
