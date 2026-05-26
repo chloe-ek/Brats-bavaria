@@ -18,7 +18,7 @@ const Footer = () => {
 
           {/* Instagram */}
           <a
-            href="https://instagram.com/bratsandbavaria"
+            href="https://instagram.com/bratsnbavaria"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
@@ -45,7 +45,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <p className="text-xs sm:text-sm font-normal leading-normal">
-          © 2025 Brats and Bavaria. All rights reserved.
+          © {new Date().getFullYear()} Brats and Bavaria. All rights reserved.
         </p>
       </div>
     </footer>

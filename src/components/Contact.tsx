@@ -38,9 +38,9 @@ const Contact = () => {
   return (
     <div id="contact" className="w-full px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 bg-no-repeat bg-center max-w-[1400px] mx-auto">
       <div className="h-12 sm:h-16 md:h-20" />
-      <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-Montserrat">Contact Us</h2>
+      <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-BebasNeue tracking-wide">Contact Us</h2>
 
-      <p className="text-center max-w-2xl mx-auto mt-4 sm:mt-5 mb-8 sm:mb-12 font-Montserrat text-sm sm:text-base">
+      <p className="text-center max-w-2xl mx-auto mt-4 sm:mt-5 mb-8 sm:mb-12 font-sans text-sm sm:text-base">
        Connect with us for event inquiries, sponsorships, or general information.
       </p>
 

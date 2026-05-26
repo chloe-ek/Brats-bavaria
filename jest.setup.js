@@ -1,4 +1,8 @@
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
+
+global.URL.createObjectURL = jest.fn(() => 'blob:mock-url');
+global.URL.revokeObjectURL = jest.fn();
+window.HTMLElement.prototype.scrollIntoView = jest.fn();
 
 // Mock global Request/Response for Node.js environment
 global.Request = class Request {

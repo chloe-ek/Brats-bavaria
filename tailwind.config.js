@@ -9,14 +9,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        Outfit: ['Outfit', 'sans-serif'],
-        Ovo: ['Ovo', 'serif'],
-        Playfair: ['Playfair Display', 'serif'],
-        Roboto: ['Roboto', 'sans-serif'],
-        Satoshi: ['Satoshi', 'sans-serif'],
-        Cinzel: ['Cinzel', 'serif'],
-        Poppins: ['Poppins', 'sans-serif'],
         Montserrat: ['Montserrat', 'sans-serif'],
+        BebasNeue: ['Bebas Neue', 'sans-serif'],
       },
     },
   },

@@ -6,13 +6,14 @@ export async function PATCH(
   context: { params: Promise<{ id: string }> }
 ) {
   const { id } = await context.params;
-  
   const { notes } = await request.json();
 
   const { error } = await adminDb
-    .from("submissions")
-    .update({ notes })
-    .eq("id", id);
+    .from("reviews")
+    .upsert(
+      { submission_id: id, notes },
+      { onConflict: 'submission_id' }
+    );
 
   if (error) {
     return NextResponse.json({ error: "Failed to update notes" }, { status: 500 });

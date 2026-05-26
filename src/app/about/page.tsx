@@ -43,11 +43,11 @@ const About = () => {
       <Nav />
 
       <div className="flex-grow mx-auto max-w-[1400px] px-4 sm:px-8 md:px-16 lg:px-32 py-8 sm:py-12 md:py-16 text-white">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-semibold mb-4 font-Montserrat text-center w-full">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl mb-4 font-BebasNeue tracking-wide text-center w-full">
           ABOUT US
         </h1>
 
-      
+
 
         <div className="h-[1px] bg-white/30 w-full my-4 sm:my-6" />
 

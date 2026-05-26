@@ -9,12 +9,17 @@ export async function GET(
     const { id } = await context.params;
     const { data, error } = await adminDb
       .from('submissions')
-      .select('*')
+      .select(`
+        *,
+        applicant:applicants(id, name, email, phone, instagram),
+        photos(id, url),
+        review:reviews(id, seen, notes),
+        payment:payments(id, status, paid_at)
+      `)
       .eq('id', id)
       .single();
 
     if (error || !data) {
-      console.error('Fetch error:', error);
       return NextResponse.json({ error: 'Submission not found' }, { status: 404 });
     }
 

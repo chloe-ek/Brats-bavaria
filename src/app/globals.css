@@ -1,3 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.metallic-text {
+  font-family: 'Bebas Neue', sans-serif;
+  display: block;
+  line-height: 0.88;
+  letter-spacing: -0.01em;
+  user-select: none;
+
+  background: linear-gradient(
+    135deg,
+    #c8c8c8  0%,
+    #eeeeee 20%,
+    #ffffff 35%,
+    #d8d8d8 50%,
+    #ffffff 65%,
+    #d0d0d0 80%,
+    #ffffff 100%
+  );
+  background-size: 250% 250%;
+  background-position: 0% 0%;
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+
+  animation: metallic-sweep 15s ease-in-out infinite;
+}
+
+@keyframes metallic-sweep {
+  0%   { background-position:   0%   0%; }
+  50%  { background-position: 100% 100%; }
+  100% { background-position:   0%   0%; }
+}
+
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.45), transparent);
+  animation: btn-shine-sweep 0.7s ease 1s 1 forwards;
+}
+@keyframes btn-shine-sweep {
+  from { left: -80%; }
+  to   { left: 140%; }
+}
+
+.fade-in-up {
+  opacity: 0;
+  animation: fade-in-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
