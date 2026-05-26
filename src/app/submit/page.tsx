@@ -377,30 +377,32 @@ const Submit = () => {
           {/* Submit */}
           <div className="pt-4">
             <div className="h-px bg-white/10 mb-10" />
-            <button
-              type="submit"
-              disabled={isSubmitting || isCompressing}
-              className={`group flex items-center gap-3 border border-white/40 text-white text-xs font-sans font-semibold tracking-widest uppercase px-8 py-4 hover:bg-white hover:text-black transition-all duration-300 ${
-                isSubmitting || isCompressing ? "opacity-40 cursor-not-allowed" : "cursor-pointer"
-              }`}
-            >
-              {isSubmitting ? "Submitting…" : "Submit Application"}
-              {!isSubmitting && <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>}
-            </button>
+            <div className="flex flex-col items-end w-full">
+              <button
+                type="submit"
+                disabled={isSubmitting || isCompressing}
+                className={`group flex items-center gap-3 border border-white/40 text-white text-xs font-sans font-semibold tracking-widest uppercase px-8 py-4 hover:bg-white hover:text-black transition-all duration-300 ${
+                  isSubmitting || isCompressing ? "opacity-40 cursor-not-allowed" : "cursor-pointer"
+                }`}
+              >
+                {isSubmitting ? "Submitting…" : "Submit Application"}
+                {!isSubmitting && <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>}
+              </button>
 
-            {isSubmitting && uploadProgress && (
-              <div className="mt-4 space-y-2">
-                <p className="text-xs text-white/40 uppercase tracking-widest">
-                  Uploading photo {uploadProgress.current} of {uploadProgress.total}…
-                </p>
-                <div className="w-48 h-px bg-white/10">
-                  <div
-                    className="h-px bg-white/50 transition-all duration-300"
-                    style={{ width: `${(uploadProgress.current / uploadProgress.total) * 100}%` }}
-                  />
+              {isSubmitting && uploadProgress && (
+                <div className="mt-4 space-y-2 text-right">
+                  <p className="text-xs text-white/40 uppercase tracking-widest">
+                    Uploading photo {uploadProgress.current} of {uploadProgress.total}…
+                  </p>
+                  <div className="w-48 h-px bg-white/10 ml-auto">
+                    <div
+                      className="h-px bg-white/50 transition-all duration-300"
+                      style={{ width: `${(uploadProgress.current / uploadProgress.total) * 100}%` }}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
         </form>
