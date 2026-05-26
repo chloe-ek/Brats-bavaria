@@ -18,6 +18,9 @@ jest.mock('next/server', () => ({
 }));
 
 describe('POST /api/contact', () => {
+  beforeAll(() => {
+    process.env.CONTACT_EMAIL = 'test@example.com';
+  });
   const { resend } = jest.requireMock('@/utils/resend');
 
   function makeRequest(body: object) {
@@ -41,7 +44,7 @@ describe('POST /api/contact', () => {
     expect(body.success).toBe(true);
     expect(resend.emails.send).toHaveBeenCalledWith(
       expect.objectContaining({
-        to: 'pbe46m3@gmail.com',
+        to: process.env.CONTACT_EMAIL,
         subject: 'New Message from John',
       })
     );

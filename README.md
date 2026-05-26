@@ -28,7 +28,7 @@ Built to simplify the car selection and event registration process with a clean 
 ## 🧪 Testing
 
 - **Framework:** Jest + React Testing Library
-- **Test Suites:** 8 suites · 40 tests
+- **Test Suites:** 10 suites · 46 tests
 - **Coverage:** API route handlers, UI components, form validation, payment webhook
 
 <p align="center">
@@ -41,7 +41,9 @@ Built to simplify the car selection and event registration process with a clean 
 | ------------------ | ---------------------------------------------------------------------- |
 | **Submit API**     | Applicant upsert, submission insert, photo insert, error handling      |
 | **Admin API**      | Submission listing, year filter, descending sort order                 |
-| **Stripe Webhook** | Signature verification, payment status update, unhandled event types   |
+| **Approve API**    | Full approval workflow, Stripe integration, email delivery, DB failure |
+| **Reject API**     | Rejection flow, review marked as seen, DB failure handling             |
+| **Stripe Webhook** | Signature verification, payment status update, DB failure, unhandled event types |
 | **Contact API**    | Email sending via Resend, failure and exception handling               |
 | **Submit Form**    | Email match validation, photo count limits (3–5), form field rendering |
 | **Contact Form**   | Sending state, success/error messages, correct fetch payload           |
