@@ -32,6 +32,7 @@ export async function POST(req: Request) {
 
       if (error) {
         console.error('Failed to update payment:', error);
+        return new NextResponse('Database error', { status: 500 });
       }
     }
   }

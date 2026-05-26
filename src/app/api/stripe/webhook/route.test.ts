@@ -87,6 +87,21 @@ describe('POST /api/stripe/webhook', () => {
     expect(adminDb.from).not.toHaveBeenCalled();
   });
 
+  it('returns 500 when database update fails', async () => {
+    (stripe.webhooks.constructEvent as jest.Mock).mockReturnValue({
+      type: 'checkout.session.completed',
+      data: { object: { metadata: { submissionId: 'sub-123' } } },
+    });
+
+    const paymentsChain = buildChain({ error: { message: 'DB error' } });
+    (adminDb.from as jest.Mock).mockReturnValue(paymentsChain);
+
+    const req = makeRequest('{}', 'valid-sig');
+    const res = await POST(req);
+
+    expect(res.status).toBe(500);
+  });
+
   it('ignores unhandled event types and returns 200', async () => {
     (stripe.webhooks.constructEvent as jest.Mock).mockReturnValue({
       type: 'invoice.payment_failed',
